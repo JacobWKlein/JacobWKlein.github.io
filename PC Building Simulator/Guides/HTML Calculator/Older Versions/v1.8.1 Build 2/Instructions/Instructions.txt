@@ -1,0 +1,40 @@
+For these 4 resources:
+CPU.txt.html
+GPU.txt.html
+Motherboard.txt.html
+RAM.txt.html
+
+The ".txt.html" file is just the TextAsset .txt file, with some JavaScript code attached.
+
+Instructions are:
+> Open a Browser Web Console
+> Perform the command
+> Paste JSON into Visual Studio, for formatting.
+> Paste formatted JSON into HTML Calculator .html file.
+
+Older Commands:
+document.write(JSON.stringify(results))
+document.write(JSON.stringify(resultsSorted))
+
+Current Command:
+document.write(JSON.stringify(getResults()))
+
+===============================================================================================================
+
+Instructions:
+1) Do Motherboards JSON first, and be sure to get updated Memory Speeds
+2) Update Memory Speeds in CPU HTML
+3) Get other 3 JSONs
+4) Build main guide
+
+===============================================================================================================
+
+Excel Strings:
+
+Listing (for CPUs, GPUs, Motherboards):
+= "<option>" & [@Manufacturer] & " " & [@[Part Name]] & "</option>"
+
+Part Ranking (for CPUs, GPUs):
+= "<tr><td>" & [@[Part Type]] & "</td><td>" & [@Manufacturer] & "</td><td>" & [@[Part Name]] & "</td><td>" & [@[Part Ranking Score]] & "</td></tr>"
+
+===============================================================================================================

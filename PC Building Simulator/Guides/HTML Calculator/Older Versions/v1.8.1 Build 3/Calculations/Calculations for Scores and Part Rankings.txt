@@ -1,0 +1,79 @@
+CPU Part Ranking:
+FLOOR
+(
+   (
+      (CoreClockMultiplier * Frequency) +
+      (MemChannelsMultiplier * MaxMemoryChannels) +
+      (MemClockMultiplier * DefaultMemorySpeed) +
+      (FinalAdjustment)
+   ) * 100
+)
+
+Basic CPU Score:
+FLOOR
+(
+   (
+      (CoreClockMultiplier * Frequency) +
+      (MemChannelsMultiplier * MaxMemoryChannels) +
+      (MemClockMultiplier * DefaultMemorySpeed) +
+      (FinalAdjustment)
+   ) * 298
+)
+
+GPU Part Ranking:
+FLOOR
+(
+   (
+      (GT1SingleCoreClockMultiplier * BaseCoreFreq) +
+      (GT1SingleMemClockMultiplier * BaseMemFreq) +
+      (GT1SingleBenchmarkAdjustment)
+   ) * 100
+)
+
+Single GPU Graphics Score:
+FLOOR
+(
+   164 /
+   (
+      (
+         0.5 / 
+         (
+            (GT1SingleCoreClockMultiplier * BaseCoreFreq) +
+            (GT1SingleMemClockMultiplier * BaseMemFreq) +
+            (GT1SingleBenchmarkAdjustment)
+         )
+      ) +
+      (
+         0.5 /
+         (
+            (GT2SingleCoreClockMultiplier * BaseCoreFreq) +
+            (GT2SingleMemClockMultiplier * BaseMemFreq) +
+            (GT2SingleBenchmarkAdjustment)
+         )
+      )
+   )
+)
+
+Double GPU Graphics Score:
+FLOOR
+(
+   164 /
+   (
+      (
+         0.5 / 
+         (
+            (GT1DualCoreClockMultiplier * BaseCoreFreq) +
+            (GT1DualMemClockMultiplier * BaseMemFreq) +
+            (GT1DualBenchmarkAdjustment)
+         )
+      ) +
+      (
+         0.5 /
+         (
+            (GT2DualCoreClockMultiplier * BaseCoreFreq) +
+            (GT2DualMemClockMultiplier * BaseMemFreq) +
+            (GT2DualBenchmarkAdjustment)
+         )
+      )
+   )
+)

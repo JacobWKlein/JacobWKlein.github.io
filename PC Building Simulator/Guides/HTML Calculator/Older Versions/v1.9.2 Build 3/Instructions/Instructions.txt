@@ -1,0 +1,41 @@
+===============================================================================================================
+
+For these 4 resources:
+Motherboard.txt.html
+CPU.txt.html
+GPU.txt.html
+RAM.txt.html
+
+The ".txt.html" file is just the TextAsset .txt file, with some JavaScript code at the bottom.
+
+Instructions are:
+> Replace the table at the top, with the desired/updated TextAsset .txt file contents.
+> Open a Browser Web Console.
+> Perform the command.
+> Paste JSON into Visual Studio, for formatting.
+> Paste formatted JSON into HTML Calculator .html file, near the top within the data section.
+
+===============================================================================================================
+
+Instructions:
+1) Create the Motherboards JSON first.
+2) Use the Motherboards web console, to get updated Memory Speeds.
+3) Update Memory Speeds in CPU HTML.
+4) Create the other 3 JSONs.
+5) Build the main guide.
+
+===============================================================================================================
+
+Current Commands:
+
+Note: The boolean parameter is for whether you want to include the Hardware Expansion Mod parts.
+
+Commands that I use:
+getMotherboardCPUSocketMemorySpeeds(false)
+getMotherboardCPUSocketMemorySpeeds(true)
+document.write(JSON.stringify(getResults(true)))
+
+Other commands:
+document.write(JSON.stringify(getResults(false)))
+
+===============================================================================================================

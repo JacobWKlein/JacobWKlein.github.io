@@ -1,0 +1,1488 @@
+<html>
+	<head>
+		<style>
+			body {
+				background-color: #e8cc96;
+			}
+			#nav {
+				width: 100%;
+				height: 40px;
+				background-color: #ed7474;
+				position: fixed;
+				top: 0;
+				left: 0;
+				text-align: center;
+			}
+			.navBarItem{
+				list-style: none;
+				display: inline-block;
+				padding: 11px 5px;
+				cursor: hand;
+				border-left: 1px solid;
+				border-right: 1px solid;
+				margin-left: -5px;
+			}
+			#content {
+				margin-top: 50px;
+				height: 100%;
+				width: 100%;
+				text-align: center;
+			}
+			#scoreCalculator {
+				background-color: #e89a96;
+				width: 500px;
+				margin: auto;
+				padding: 15 20px;
+			}
+			input {
+				border-radius: 5px 5px 5px 5px;
+				height: 25px;
+				width: 350px;
+			}
+			caption {
+				font-size: 25px;
+				font-weight: bold;
+			}
+			select {
+				border-radius: 5px 5px 5px 5px;
+				height: 25px;
+				width: 350px;
+			}
+			#first {
+				display: none;
+			}
+			#second {
+				display: block;
+			}
+			#third {
+				display: none;
+			}
+			#forth{
+				display: none;
+			}
+			#buildMaker {
+				background-color: #e89a96;
+				width: 500px;
+				margin: auto;
+				padding: 15 20px;
+				margin-bottom: 20px;
+			}
+			#buildUpgrader {
+				margin: auto;
+				width: 500px;
+				background-color: #e89a96;
+				padding: 15 20px;
+				margin-bottom: 20px;
+			}
+			#buildMakerTable td {
+				border: 1px solid;
+				padding: 8px;
+			}
+			#buildMakerTable {
+				border: none;
+				padding: 8px;
+				border-collapse: collapse;
+				margin: auto;
+			}
+			#buildMakerHistoryTable td{
+				border: 1px solid;
+				padding: 8px;
+			}#scoreCalculatorHistoryTable td{
+				border: 1px solid;
+				padding: 8px;
+			}#buildMakerHistoryTable {
+				border: none;
+				padding: 8px;
+				border-collapse: collapse;
+				margin: auto;
+			}#scoreCalculatorHistoryTable {
+				border: none;
+				padding: 8px;
+				border-collapse: collapse;
+				margin: auto;
+			}
+			#buildUpgraderTable td {
+				border: 1px solid;
+				padding: 8px;
+			}
+			#buildUpgraderTable {
+				border: none;
+				padding: 8px;
+				border-collapse: collapse;
+				margin: auto;
+			}
+			
+			#saveBuildBackground {
+				top: 40%;
+				left: 40%;
+				position: absolute;
+				background-color: white;
+				z-index: 2;
+				border: 5px 5px 5px 5px;
+				height: 100px;
+				width: 350px;
+				padding: 20px 20px;
+				display: none;
+			}
+		</style>
+		<script src="3dmscores.js"></script>
+		<script>
+			function showThisCal(idToShow, hide1, hide2, hide3) {
+				document.getElementById(idToShow).style.display = "block"
+				document.getElementById(hide1).style.display = "none"
+				document.getElementById(hide2).style.display = "none"
+				document.getElementById(hide3).style.display = "none"
+			};
+			
+			function blurBackground(id){
+				id.style.filter = "blur(8px)"
+			}
+			
+			function unblurBackground(id){
+				id.style.filter = "blur(0px)"
+			}
+
+			function getScore(cpuScore, gpuScore) {
+				return Math.floor(1 / ((0.85 / gpuScore) + (0.15 / cpuScore)))
+			}
+
+			function getWattage(gpuwattage, cpuwattage, offset) {
+				return gpuwattage + cpuwattage + (offset || 0)
+			}
+
+			function showAvailableRamSpeed(cpu, ramslist) {
+				var speedList = Object.keys(data.procs[cpu]['1'])
+				for (i = 0; i < ramslist.options.length; i++) {
+					if (speedList.includes(ramslist.options[i].value) == false) {
+						ramslist.options[i].style.display = 'none'
+					} else {
+						ramslist.options[i].style.display = 'block'
+					}
+				}
+			}
+
+			function showAvailableRamChannel(cpu, channellist) {
+				for (i = 0; i < channellist.options.length; i++) {
+					if (data.procs[cpu][channellist.options[i].value]) {
+						channellist.options[i].style.display = "block"
+					} else {
+						channellist.options[i].style.display = "none"
+					}
+				}
+			}
+
+			function showAvailableMotherboard(cpuid, gpuid, slicf, motherboardlist) {
+				for (mobo in motherboardlist.options) {
+					if (mobo == "length" || mobo == "selectedIndex" || mobo == "add" || mobo == "remove" || mobo == "item" || mobo == "namedItem") {
+						continue
+					}
+					if (data.procs[cpuid].socket == data.motherboards[motherboardlist.options[mobo].innerHTML].socket) {
+						if (slicf == "1") {
+							motherboardlist.options[mobo].style.display = "block"
+						} else {
+							if (data.motherboards[motherboardlist.options[mobo].innerHTML].multigpu != null && (data.motherboards[motherboardlist.options[mobo].innerHTML].multigpu).includes(data.gpus[gpuid].multigpu)) {
+								motherboardlist.options[mobo].style.display = "block"
+							} else {
+								motherboardlist.options[mobo].style.display = "none"
+							}
+						}
+					} else {
+						motherboardlist.options[mobo].style.display = "none"
+					}
+				}
+			}
+
+			function scoreCalculatorCal() {
+				var cpu = document.getElementById('scoreCForm').cpu1.value
+				var rams = document.getElementById('scoreCForm').rams1.value
+				var ramc = document.getElementById('scoreCForm').ramc1.value
+				var gpu = document.getElementById('scoreCForm').gpu1.value
+				var slicf = document.getElementById('scoreCForm').slicf1.value
+				if (!data.procs[cpu] || data.procs[cpu][ramc][rams] == "") {
+					alert("Processor not found")
+				} else if (!data.gpus[gpu]) {
+					alert("GPU not found")
+				} else if (!data.gpus[gpu][slicf]) {
+					alert("Selected GPU is not available for SLI/CrossFire")
+				} else {
+					var score = getScore(data.procs[cpu][ramc][rams], data.gpus[gpu][slicf].score)
+					var wattage = getWattage(data.gpus[gpu][slicf].wattage, data.procs[cpu].wattage, 50)
+					var cpuP = data.procs[cpu].price
+					var cpuUP = data.procs[cpu].sellPrice
+					var gpuP = data.gpus[gpu][slicf].price
+					var gpuUP = data.gpus[gpu][slicf].sellPrice
+					document.getElementById('cpuScoreResult1').innerText = data.procs[cpu][ramc][rams]
+					document.getElementById('gpuScoreResult1').innerText = data.gpus[gpu][slicf].score
+					document.getElementById('totalScoreResult1').innerText = score
+					document.getElementById('wattageResult1').innerText = wattage
+					document.getElementById('cpuPrice1').innerText = cpuP
+					document.getElementById('cpuUsedPrice1').innerText = cpuUP
+					document.getElementById('gpuPrice1').innerText = gpuP
+					document.getElementById('gpuUsedPrice1').innerText = gpuUP
+				}
+				return [score, wattage, cpuP + gpuP]
+			}
+
+			function parts(proc, ramspeed, channel, gpu, slicf, mobo, ram, score, wattage, cost, budgetleft) {
+				var build = {
+					"processor": proc,
+					"ramspeed": ramspeed,
+					"channel": channel,
+					"gpu": gpu,
+					"slicf": slicf,
+					"mobo": mobo,
+					"ram": ram,
+					"score": score,
+					"wattage": wattage,
+					"cost": cost,
+					"budgetleft": budgetleft
+				}
+				return build
+			}
+			
+			var temp
+			
+			function addSaveButton(target,id) {
+				var button = document.createElement('BUTTON')
+				button.id = id
+				button.onclick = function() {
+					blurBackground(document.getElementById('buildMaker'))
+					blurBackground(document.getElementById('buildMakerResults'))
+					showSaver(document.getElementById('saveBuildBackground'))
+					temp = this.id
+				}
+				var text = document.createTextNode('Save this')
+				button.append(text)
+				target.append(button)
+			}
+			
+			function showSaver(id){
+				id.style.display = "block"
+			}
+			
+			function hideSaver(id){
+				id.style.display = "none"
+			}
+			
+			function savePcBuild(id,type,remarks){
+				cpu = id.cells[0].innerHTML
+				ramc = id.cells[1].innerHTML
+				rams = id.cells[2].innerHTML
+				gpu = id.cells[3].innerHTML
+				slicf = id.cells[4].innerHTML
+				mobo = id.cells[5].innerHTML
+				ram = id.cells[6].innerHTML
+				cost = id.cells[7].innerHTML
+				budgetleft = id.cells[8].innerHTML
+				wattage = id.cells[9].innerHTML
+				score = id.cells[10].innerHTML
+				type = type
+				remarks = remarks
+				saveBuild(cpu, ramc, rams, gpu, slicf, mobo, ram, cost, budgetleft, wattage, score, type, remarks)
+			}
+
+			function generateBuild() {
+				var budget = Number(document.getElementById('buildForm').budget1.value)
+				var resbudget = Number(document.getElementById('buildForm').resbudget1.value)
+				var score = Number(document.getElementById('buildForm').score1.value)
+				var offset = document.getElementById('buildForm').offset1.value
+				var level = Number(document.getElementById('buildForm').level1.value)
+				var results = Number(document.getElementById('buildForm').results1.value) || 10
+				var architecture = document.getElementById('buildForm').architecture1.value
+				var incmobo = document.getElementById('buildForm').incmobo1.checked
+				var incram = document.getElementById('buildForm').incram1.checked
+				var needoc = document.getElementById('buildForm').needoc1.checked
+				var builds = []
+				if (offset == "") {
+					offset = 200
+				} else {
+					offset = Number(offset)
+				}
+				for (cpu in data.procs) {
+					if (data.procs[cpu].level <= level) {
+						if (needoc == true && data.procs[cpu].oc == "No") {
+							continue
+						}
+						if (architecture == "skylake" && data.procs[cpu].type != "skylake") {
+							continue
+						} else if (architecture == "kabylake" && data.procs[cpu].type != "kabylake") {
+							continue
+						} else if (architecture == "coffeelake" && data.procs[cpu].type != "coffeelake") {
+							continue
+						} else if (architecture == "xseries" && data.procs[cpu].type != "xseries") {
+							continue
+						} else if (architecture == "ryzen" && data.procs[cpu].type != "ryzen") {
+							continue
+						} else if (architecture == "threadripper" && data.procs[cpu].type != "threadripper") {
+							continue
+						}
+						for(ramchannel in data.procs[cpu]){
+							if(ramchannel != "1" && ramchannel != "2" && ramchannel != "3" && ramchannel != "4"){
+								continue
+							}
+							for(ramspeed in data.procs[cpu][ramchannel]){
+								for(gpu in data.gpus){
+									if(data.gpus[gpu].level > level){
+										continue
+									}
+									for(slicf in data.gpus[gpu]){
+										if(slicf != "1" && slicf != "2"){
+											continue
+										}
+										var currentScore = getScore(data.procs[cpu][ramchannel][ramspeed], data.gpus[gpu][slicf].score)
+										var currentPrice = data.procs[cpu].price + data.gpus[gpu][slicf].price
+										if(currentScore < score || currentPrice > (budget-resbudget)){
+											continue
+										}else if(currentScore > (score+offset)){
+											continue
+										}
+										var pickedmobo,pickedram
+										
+										if(incmobo == true && incram == false){
+											for(mobo in data.motherboards){
+												if(data.motherboards[mobo].level > level){
+													continue
+												}else if((slicf == "2") && (data.motherboards[mobo].multigpu == null || (data.motherboards[mobo].multigpu.includes(data.gpus[gpu].multigpu) == false))){
+													continue
+												}else if(data.motherboards[mobo].socket != data.procs[cpu].socket){
+													continue
+												}else if(needoc == true && data.motherboards[mobo].oc != "Yes") {
+													continue
+												}else if(data.motherboards[mobo].speeds.includes(ramspeed.toString()) == false){
+													continue
+												}
+												var tempCurrentPrice = currentPrice + data.motherboards[mobo].price
+												if (tempCurrentPrice <= (budget - resbudget)) {
+													currentPrice += data.motherboards[mobo].price
+													pickedmobo = data.motherboards[mobo].fullName
+													builds.push(parts(cpu, ramspeed, ramchannel, gpu, slicf, (pickedmobo || "-"), (pickedram || "-"), currentScore, (data.procs[cpu].wattage + data.gpus[gpu][slicf].wattage), currentPrice, (budget - currentPrice)))
+												}
+											}
+										}else if(incmobo == false && incram == true){
+											for(rams in data.ram){
+												if(data.ram[rams].level > level){
+													continue
+												}else if(data.ram[rams].baseFreq < Number(ramspeed)){
+													continue
+												}
+												var tempCurrentPrice = currentPrice + (data.ram[rams].price * ramchannel)
+												if (tempCurrentPrice <= (budget - resbudget)) {
+													currentPrice += (data.ram[rams].price * ramchannel)
+													pickedram = data.ram[rams].fullName
+													builds.push(parts(cpu, ramspeed, ramchannel, gpu, slicf, (pickedmobo || "-"), (pickedram || "-"), currentScore, (data.procs[cpu].wattage + data.gpus[gpu][slicf].wattage), currentPrice, (budget - currentPrice)))
+												}
+											}
+										}else if(incmobo == true && incram == true){
+											for(mobo in data.motherboards){
+												if(data.motherboards[mobo].level > level){
+													continue
+												}else if((slicf == "2") && (data.motherboards[mobo].multigpu == null || (data.motherboards[mobo].multigpu.includes(data.gpus[gpu].multigpu) == false))){
+													continue
+												}else if(data.motherboards[mobo].socket != data.procs[cpu].socket){
+													continue
+												}else if(needoc == true && data.motherboards[mobo].oc != "Yes") {
+													continue
+												}else if(data.motherboards[mobo].speeds.includes(ramspeed.toString()) == false){
+													continue
+												}
+												var tempCurrentPrice = currentPrice + data.motherboards[mobo].price
+												if (tempCurrentPrice <= (budget - resbudget)) {
+													currentPrice += data.motherboards[mobo].price
+													pickedmobo = data.motherboards[mobo].fullName
+													for(rams in data.ram){
+														if(data.ram[rams].level > level){
+															continue
+														}else if(data.ram[rams].baseFreq < Number(ramspeed)){
+															continue
+														}
+														var tempCurrentPrice = currentPrice + (data.ram[rams].price * ramchannel)
+														if (tempCurrentPrice <= (budget - resbudget)) {
+															currentPrice += (data.ram[rams].price * ramchannel)
+															pickedram = data.ram[rams].fullName
+															builds.push(parts(cpu, ramspeed, ramchannel, gpu, slicf, (pickedmobo || "-"), (pickedram || "-"), currentScore, (data.procs[cpu].wattage + data.gpus[gpu][slicf].wattage), currentPrice, (budget - currentPrice)))
+														}
+													}
+												}
+											}
+										}else{
+											builds.push(parts(cpu, ramspeed, ramchannel, gpu, slicf, (pickedmobo || "-"), (pickedram || "-"), currentScore, (data.procs[cpu].wattage + data.gpus[gpu][slicf].wattage), currentPrice, (budget - currentPrice)))
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				builds.sort(sortByCost)
+				var tempBuilds = []
+				if (builds.length <= results) {
+					tempBuilds = builds
+					results = builds.length
+				} else {
+					tempBuilds.push(builds[0])
+					tempBuilds.push(builds[builds.length - 1])
+					for (i = 0; i < results - 2; i++) {
+						tempBuilds.push(builds[getRandomInt(1, builds.length - 2)])
+					}
+				}
+				tempBuilds.sort(sortByCost)
+				var table = document.getElementById('buildMakerTable')
+				for (i = table.rows.length - 1; i >= 1; i--) {
+					table.deleteRow(i)
+				}
+				for (i = 1; i < results + 1; i++) {
+					table.insertRow(i)
+					for (a = 0; a < 12; a++) {
+						table.rows[i].insertCell(a)
+					}
+				}
+				for (i = 1; i < results + 1; i++) {
+					table.rows[i].cells[0].innerHTML = tempBuilds[i - 1].processor
+					table.rows[i].cells[1].innerHTML = tempBuilds[i - 1].channel
+					table.rows[i].cells[2].innerHTML = tempBuilds[i - 1].ramspeed
+					table.rows[i].cells[3].innerHTML = tempBuilds[i - 1].gpu
+					table.rows[i].cells[4].innerHTML = tempBuilds[i - 1].slicf
+					table.rows[i].cells[5].innerHTML = tempBuilds[i - 1].mobo
+					table.rows[i].cells[6].innerHTML = tempBuilds[i - 1].ram
+					table.rows[i].cells[7].innerHTML = tempBuilds[i - 1].cost
+					table.rows[i].cells[8].innerHTML = tempBuilds[i - 1].budgetleft
+					table.rows[i].cells[9].innerHTML = tempBuilds[i - 1].wattage
+					table.rows[i].cells[10].innerHTML = tempBuilds[i - 1].score
+					table.rows[i].cells[11] = addSaveButton(table.rows[i].cells[11],i)
+				}
+			}
+
+			function sortByCost(a, b) {
+				if (a.cost < b.cost) {
+					return -1;
+				}
+				if (a.cost > b.cost) {
+					return 1;
+				}
+				return 0;
+			}
+
+			function getRandomInt(min, max) {
+				min = Math.ceil(min);
+				max = Math.floor(max);
+				return Math.floor(Math.random() * (max - min)) + min;
+			}
+
+			function upgradeBuild() {
+				var currentProc = document.getElementById('upgradeForm').currentProc1.value
+				var currentRamChannel = document.getElementById('upgradeForm').currentRamC1.value
+				var currentRamSpeed = document.getElementById('upgradeForm').currentRamS1.value
+				var currentGpu = document.getElementById('upgradeForm').currentGpu1.value
+				var currentSlicf = document.getElementById('upgradeForm').currentSlicf1.value
+				var currentMobo = document.getElementById('upgradeForm').currentMobo1.value
+				var budget = Number(document.getElementById('upgradeForm').budget2.value)
+				var resbudget = Number(document.getElementById('upgradeForm').resbudget2.value) || 0
+				var score = Number(document.getElementById('upgradeForm').score2.value)
+				var offset = Number(document.getElementById('upgradeForm').offset2.value)
+				var level = Number(document.getElementById('upgradeForm').level2.value)
+				var results = Number(document.getElementById('upgradeForm').results2.value) || 10
+				var upgrades = []
+				if (offset == "") {
+					offset = 200
+				} else {
+					offset = Number(offset)
+				}
+				var currentScore = getScore(data.procs[currentProc][currentRamChannel][currentRamSpeed], data.gpus[currentGpu][currentSlicf].score)
+				if (currentScore > score) {
+					alert("No upgrade is needed")
+					return false
+				}
+				for (cpu in data.procs) {
+					var cost = data.procs[cpu].price
+					if (data.procs[cpu].socket != data.motherboards[currentMobo].socket) {
+						continue
+					} else if (data.procs[cpu].level > level) {
+						continue
+					} else if (cost > (budget - resbudget)) {
+						continue
+					}
+					var newScore = getScore(data.procs[cpu][currentRamChannel][currentRamSpeed], data.gpus[currentGpu][currentSlicf].score)
+					if ((newScore >= score) && (newScore < (score + offset))) {
+						upgrades.push(parts(cpu, "-", "-", "-", "-", "-", "-", newScore, (data.procs[cpu].wattage + data.gpus[currentGpu][currentSlicf].wattage), cost, budget - cost))
+					}
+				}
+				for (gpu in data.gpus) {
+					if (data.gpus[gpu].level > level) {
+						continue
+					}
+					for (sf in data.gpus[gpu]) {
+						if (sf != "1" && sf != "2") {
+							continue
+						}
+						var cost = data.gpus[gpu][sf].price
+						if (sf == "2" && (data.motherboards[currentMobo].multigpu != null) && (data.motherboards[currentMobo].multigpu.includes(data.gpus[gpu].multigpu) == false)) {
+							continue
+						}
+						if (cost > (budget - resbudget)) {
+							continue
+						}
+						var newScore = getScore(data.procs[currentProc][currentRamChannel][currentRamSpeed], data.gpus[gpu][sf].score)
+						if ((newScore >= score) && (newScore < (score + offset))) {
+							upgrades.push(parts("-", "-", "-", gpu, sf, "-", "-", newScore, (data.procs[currentProc].wattage + data.gpus[gpu][sf].wattage), cost, budget - cost))
+						}
+					}
+				}
+				if ((data.motherboards[currentMobo].multigpu != null) && (data.motherboards[currentMobo].multigpu).includes(data.gpus[currentGpu].multigpu)) {
+					var cost = data.gpus[currentGpu]["1"].price
+					var newScore = getScore(data.procs[currentProc][currentRamChannel][currentRamChannel], data.gpus[currentGpu]["2"])
+					if (cost > (budget - resbudget)) {
+						if ((newScore >= score) && (newScore < (score + offset))) {
+							upgrades.push(parts("-", "-", "-", currentGpu, 2, "-", "-", newScore, (data.procs[currentProc].wattage + data.gpus[currentGpu]["2"].wattage), cost, budget - cost))
+						}
+					}
+				}
+				var proclist = Object.keys(data.procs)
+				var indexOfProc = proclist.indexOf(currentProc)
+				for (cpu in data.procs) {
+					if (data.motherboards[currentMobo].socket != data.procs[cpu].socket) {
+						continue
+					} else if (data.procs[cpu].level > level) {
+						continue
+					} else if (indexOfProc >= proclist.indexOf(cpu)) {
+						continue
+					}
+					for (gpu in data.gpus) {
+						if (data.gpus[gpu].level > level) {
+							continue
+						}
+						for (sf in data.gpus[gpu]) {
+							if (sf != "1" && sf != "2") {
+								continue
+							} else if (sf == "2" && (data.motherboards[currentMobo].multigpu == null || (data.motherboards[currentMobo].multigpu.includes(data.gpus[gpu].multigpu) == false))) {
+								continue
+							}
+							var newScore = getScore(data.procs[cpu][currentRamChannel][currentRamSpeed], data.gpus[gpu][sf].score)
+							var cost = data.procs[cpu].price + data.gpus[gpu][sf].price
+							if (cost < (budget - resbudget)) {
+								if ((newScore >= score) && (newScore < (score + offset))) {
+									upgrades.push(parts(cpu, "-", "-", gpu, sf, "-", "-", newScore, (data.procs[cpu].wattage + data.gpus[gpu][sf].wattage), cost, budget - cost))
+								}
+							}
+						}
+					}
+				}
+				upgrades.sort(sortByCost)
+				var tempUpgrades = []
+				if (upgrades.length <= results) {
+					tempUpgrades = upgrades
+					results = upgrades.length
+				} else {
+					tempUpgrades.push(upgrades[0])
+					tempUpgrades.push(upgrades[upgrades.length - 1])
+					for (i = 0; i < results - 2; i++) {
+						tempUpgrades.push(upgrades[getRandomInt(1, upgrades.length - 2)])
+					}
+				}
+				tempUpgrades.sort(sortByCost)
+				var table = document.getElementById('buildUpgraderTable')
+				for (i = table.rows.length - 1; i >= 1; i--) {
+					table.deleteRow(i)
+				}
+				for (i = 1; i < results + 1; i++) {
+					table.insertRow(i)
+					for (a = 0; a < 11; a++) {
+						table.rows[i].insertCell(a)
+					}
+				}
+				for (i = 1; i < results + 1; i++) {
+					table.rows[i].cells[0].innerHTML = tempUpgrades[i - 1].processor
+					table.rows[i].cells[1].innerHTML = tempUpgrades[i - 1].channel
+					table.rows[i].cells[2].innerHTML = tempUpgrades[i - 1].ramspeed
+					table.rows[i].cells[3].innerHTML = tempUpgrades[i - 1].gpu
+					table.rows[i].cells[4].innerHTML = tempUpgrades[i - 1].slicf
+					table.rows[i].cells[5].innerHTML = tempUpgrades[i - 1].mobo
+					table.rows[i].cells[6].innerHTML = tempUpgrades[i - 1].ram
+					table.rows[i].cells[7].innerHTML = tempUpgrades[i - 1].cost
+					table.rows[i].cells[8].innerHTML = tempUpgrades[i - 1].budgetleft
+					table.rows[i].cells[9].innerHTML = tempUpgrades[i - 1].wattage
+					table.rows[i].cells[10].innerHTML = tempUpgrades[i - 1].score
+				}
+			}
+
+			function saveBuild(cpu, ramc, rams, gpu, slicf, mobo, ram, cost, budgetleft, wattage, score, type, remarks) {
+				sessionStorage.setItem(new Date().getTime(), JSON.stringify({
+					"cpu": cpu,
+					"ramc": ramc,
+					"rams": rams,
+					"gpu": gpu,
+					"slicf": slicf,
+					"mobo": mobo,
+					"ram": ram,
+					"cost": cost,
+					"budgetleft": budgetleft,
+					"wattage": wattage,
+					"score": score,
+					"type": type,
+					"remarks": remarks
+				}))
+			}
+			
+			var currSaves = 0
+			
+			setInterval(function(){
+				if(currSaves < sessionStorage.length){
+					currSaves = sessionStorage.length
+					updateHistory()
+				}
+			},100)
+			
+			function updateHistory(){
+				var x = document.getElementById('scoreCalculatorHistoryTable')
+				var y = document.getElementById('buildMakerHistoryTable')
+				for (i = x.rows.length - 1; i >= 1; i--) {
+					x.deleteRow(i)
+				}
+				for (i = y.rows.length - 1; i >= 1; i--) {
+					y.deleteRow(i)
+				}
+				
+				var list = Object.keys(sessionStorage)
+				list.forEach(function(item){
+					var a = JSON.parse(sessionStorage[item])
+					if(a.type == "scorecalculator"){
+						var r = document.getElementById('scoreCalculatorHistoryTable')
+						r.insertRow(1)
+						for(i=0;i<12;i++){
+							r.rows[1].insertCell(i)
+						}
+						r.rows[1].cells[0].innerHTML = a.cpu
+						r.rows[1].cells[1].innerHTML = a.ramc
+						r.rows[1].cells[2].innerHTML = a.rams
+						r.rows[1].cells[3].innerHTML = a.gpu
+						r.rows[1].cells[4].innerHTML = a.slicf
+						r.rows[1].cells[5].innerHTML = a.mobo
+						r.rows[1].cells[6].innerHTML = a.ram
+						r.rows[1].cells[7].innerHTML = a.cost
+						r.rows[1].cells[8].innerHTML = a.budgetleft
+						r.rows[1].cells[9].innerHTML = a.wattage
+						r.rows[1].cells[10].innerHTML = a.score
+						r.rows[1].cells[11].innerHTML = a.remarks
+					}else if(a.type == "build"){
+						var r = document.getElementById('buildMakerHistoryTable')
+						r.insertRow(1)
+						for(i=0;i<12;i++){
+							r.rows[1].insertCell(i)
+						}
+						r.rows[1].cells[0].innerHTML = a.cpu
+						r.rows[1].cells[1].innerHTML = a.ramc
+						r.rows[1].cells[2].innerHTML = a.rams
+						r.rows[1].cells[3].innerHTML = a.gpu
+						r.rows[1].cells[4].innerHTML = a.slicf
+						r.rows[1].cells[5].innerHTML = a.mobo
+						r.rows[1].cells[6].innerHTML = a.ram
+						r.rows[1].cells[7].innerHTML = a.cost
+						r.rows[1].cells[8].innerHTML = a.budgetleft
+						r.rows[1].cells[9].innerHTML = a.wattage
+						r.rows[1].cells[10].innerHTML = a.score
+						r.rows[1].cells[11].innerHTML = a.remarks
+					}
+				})
+			}
+		</script>
+	</head>
+
+	<body id="v1">
+		<div id="nav">
+			<li class="navBarItem" onclick="showThisCal('first','second','third','forth');">Score Calculator</li>
+			<li class="navBarItem" onclick="showThisCal('second','first','third','forth');">Build Maker</li>
+			<li class="navBarItem" onclick="showThisCal('third','first','second','forth');">Build Upgrader</li>
+			<li class="navBarItem" onclick="showThisCal('forth','first','second','third');">History</li>
+		</div>
+		
+		<div id="content">
+			<datalist id="cpuList">
+				<option>Intel Celeron G3900</option>
+				<option>Intel Celeron G3930</option>
+				<option>Intel Celeron G3950</option>
+				<option>Intel Pentium G4400</option>
+				<option>Intel Pentium G4500</option>
+				<option>Intel Pentium G4520</option>
+				<option>Intel Core i3-6100T</option>
+				<option>Intel Pentium G4560</option>
+				<option>Intel Pentium G4600</option>
+				<option>Intel Core i3-6100</option>
+				<option>Intel Core i3-6300</option>
+				<option>Intel Pentium G4620</option>
+				<option>Intel Core i3-6320</option>
+				<option>Intel Core i3-7100</option>
+				<option>Intel Core i3-7300</option>
+				<option>Intel Core i3-7320</option>
+				<option>Intel Core i3-7350K</option>
+				<option>AMD Ryzen 3 Quad Core 1200</option>
+				<option>AMD Ryzen 3 Quad Core 1300X</option>
+				<option>Intel Core i5-6400</option>
+				<option>Intel Core i5-6500</option>
+				<option>Intel Core i3-8100</option>
+				<option>Intel Core i5-7400</option>
+				<option>Intel Core i5-6600</option>
+				<option>Intel Core i5-6600K</option>
+				<option>AMD Ryzen 5 Quad Core 1400</option>
+				<option>Intel Core i5-7500</option>
+				<option>Intel Core i3-8350K</option>
+				<option>AMD Ryzen 5 Quad Core 1500X</option>
+				<option>Intel Core i5-7600</option>
+				<option>Intel Core i5-7600K</option>
+				<option>Intel Core i5-7640X</option>
+				<option>Intel Core i7-6700</option>
+				<option>Intel Core i7-6700K</option>
+				<option>Intel Core i7-7700</option>
+				<option>Intel Core i7-7740X</option>
+				<option>Intel Core i7-7700K</option>
+				<option>Intel Core i5-8400</option>
+				<option>AMD Ryzen 5 Six Core 1600</option>
+				<option>Intel Core i5-8600K</option>
+				<option>Intel Core i5-9600K</option>
+				<option>AMD Ryzen 5 Six Core 1600X</option>
+				<option>AMD Ryzen 5 Six Core 2600</option>
+				<option>AMD Ryzen 5 Six Core 2600X</option>
+				<option>Intel Core i7-7800X</option>
+				<option>AMD Ryzen 5 Six Core 3600</option>
+				<option>AMD Ryzen 5 Six Core 3600X</option>
+				<option>AMD Ryzen Threadripper 2970WX</option>
+				<option>AMD Ryzen 7 Eight Core 1700</option>
+				<option>Intel Core i7-8700</option>
+				<option>AMD Ryzen 7 Eight Core 1700X</option>
+				<option>AMD Ryzen Threadripper Eight Core 1900X</option>
+				<option>Intel Core i7-8700K</option>
+				<option>Intel Core i7-9700K</option>
+				<option>AMD Ryzen 7 Eight Core 1800X</option>
+				<option>Intel Core i7-8086K</option>
+				<option>AMD Ryzen 7 Eight Core 2700</option>
+				<option>AMD Ryzen 7 Eight Core 2700X</option>
+				<option>AMD Ryzen Threadripper Twelve Core 1920X</option>
+				<option>Intel Core i7-7820X</option>
+				<option>AMD Ryzen Threadripper Sixteen Core 1950X</option>
+				<option>Intel Core i7-9800X</option>
+				<option>AMD Ryzen 7 Eight Core 3700X</option>
+				<option>AMD Ryzen 7 Eight Core 3800X</option>
+				<option>AMD Ryzen Threadripper 2920X</option>
+				<option>AMD Ryzen Threadripper 2950X</option>
+				<option>Intel Core i9-9820X</option>
+				<option>Intel Core i9-9900X</option>
+				<option>Intel Core i9-7900X</option>
+				<option>Intel Core i9-9900K</option>
+				<option>Intel Core i9-7920X</option>
+				<option>Intel Core i9-9920X</option>
+				<option>Intel Core i9-7940X</option>
+				<option>Intel Core i9-9940X</option>
+				<option>Intel Core i9-7980XE</option>
+				<option>Intel Core i9-7960X</option>
+				<option>AMD Ryzen Threadripper 2990WX</option>
+				<option>Intel Core i9-9960X</option>
+				<option>Intel Core i9-9980XE</option>
+				<option>AMD Ryzen 9 Twelve Core 3900X</option>
+			</datalist>
+			<datalist id="gpuList">
+				<option>EVGA GeForce GT 1030 SC</option>
+				<option>GIGABYTE GeForce GT 1030 OC 2G</option>
+				<option>Shean GeForce GTX 750 Ti GAMER</option>
+				<option>MSI GeForce GTX 1050 GAMING 2G</option>
+				<option>MSI Radeon R9 370 GAMING 2G</option>
+				<option>GIGABYTE GeForce GTX 1050 Windforce OC 2G</option>
+				<option>MSI GeForce GTX 1050 GAMING X 2G</option>
+				<option>MSI Radeon R9 370 GAMING 4G</option>
+				<option>MSI GeForce GTX 950 GAMING 2G</option>
+				<option>ASRock Phantom Gaming Radeon RX560 4G</option>
+				<option>ASUS Radeon RX 560</option>
+				<option>EVGA GeForce GTX 1050 Ti GAMING</option>
+				<option>MSI GeForce GTX 1050 Ti GAMING 4G</option>
+				<option>ASUS ROG Strix Radeon RX 560 OC Edition</option>
+				<option>DFL Radeon R9 280 GR8 3G</option>
+				<option>GIGABYTE GeForce GTX 1050 Ti Windforce OC 4G</option>
+				<option>MSI GeForce GTX 1050 Ti GAMING X 4G</option>
+				<option>MSI Radeon R9 280 GAMING 3G LE</option>
+				<option>EVGA GeForce GTX 1050 Ti FTW GAMING</option>
+				<option>ZOTAC GeForce GTX 1050 Ti OC Edition</option>
+				<option>MSI Radeon R9 280 GAMING 3G</option>
+				<option>MSI GeForce GTX 960 GAMING LE 100ME</option>
+				<option>MSI GeForce GTX 960 GAMING 2G LE</option>
+				<option>MSI GeForce GTX 960 GAMING 4G LE</option>
+				<option>MSI GeForce GTX 960 GAMING 2G</option>
+				<option>MSI GeForce GTX 960 GAMING 4G</option>
+				<option>MSI GeForce GTX 960 GAMING 100ME</option>
+				<option>MSI Radeon R9 380 GAMING 2G</option>
+				<option>MSI Radeon R9 380 GAMING 4G</option>
+				<option>MSI GeForce GTX 970 GAMING 4G</option>
+				<option>Shean GeForce GTX 970 GAMER</option>
+				<option>MSI GeForce GTX 970 GAMING LE 100ME</option>
+				<option>Shean GeForce GTX 970 GAMER XL</option>
+				<option>MSI GeForce GTX 970 GAMING 100ME</option>
+				<option>MSI GeForce GTX 970 GAMING 4G Golden Edition</option>
+				<option>EVGA GeForce GTX 1060 GAMING 3GB</option>
+				<option>MSI Radeon RX 470 GAMING 8G</option>
+				<option>MSI Radeon RX 470 GAMING 4G</option>
+				<option>MSI GeForce GTX 1060 GAMING 3G</option>
+				<option>DFL Radeon R9 290 GR8</option>
+				<option>MSI Radeon RX 470 GAMING X 8G</option>
+				<option>MSI Radeon RX 470 GAMING X 4G</option>
+				<option>MSI GeForce GTX 1060 GAMING VR 3G</option>
+				<option>MSI GeForce GTX 1060 GAMING X 3G</option>
+				<option>ASUS Expedition Radeon RX 570 OC Edition</option>
+				<option>MSI GeForce GTX 1060 GAMING VR X 3G</option>
+				<option>MSI Radeon RX 570 GAMING 8G</option>
+				<option>MSI Radeon RX 570 GAMING 4G</option>
+				<option>DFL Radeon R9 290 GR8TOR</option>
+				<option>NVIDIA GeForce GTX 1060 Founders Edition</option>
+				<option>ZOTAC GeForce GTX 1060 Mini</option>
+				<option>MSI Radeon RX 570 GAMING X 4G</option>
+				<option>MSI Radeon RX 570 GAMING X 8G</option>
+				<option>GIGABYTE AORUS Radeon RX570 4G</option>
+				<option>MSI GeForce GTX 1060 GAMING 6G</option>
+				<option>ASUS ROG Strix Radeon RX570 OC Edition</option>
+				<option>MSI GeForce GTX 1060 GAMING VR 6G</option>
+				<option>ZOTAC GeForce GTX 1060 AMP! Edition</option>
+				<option>MSI Radeon R9 390 GAMING 8G LE</option>
+				<option>MSI Radeon RX 480 GAMING 4G</option>
+				<option>MSI GeForce GTX 1060 GAMING+ 6G</option>
+				<option>MSI GeForce GTX 1060 GAMING X 6G</option>
+				<option>MSI GeForce GTX 1060 GAMING VR X 6G</option>
+				<option>Shean GeForce GTX 980 GAMER</option>
+				<option>MSI Radeon RX 480 GAMING X 4G</option>
+				<option>ASUS ROG Strix GeForce GTX 1060 OC Edition</option>
+				<option>EVGA GeForce GTX 1060 FTW2 GAMING</option>
+				<option>GIGABYTE AORUS GeForce GTX 1060 6G</option>
+				<option>MSI Radeon RX 480 GAMING 8G</option>
+				<option>MSI Radeon R9 390 GAMING 8G</option>
+				<option>MSI GeForce GTX 1060 GAMING X+ 6G</option>
+				<option>MSI GeForce GTX 980 GAMING 4G LE</option>
+				<option>GIGABYTE AORUS GeForce GTX 1060 Xtreme Edition 6G</option>
+				<option>MSI Radeon RX 480 GAMING X 8G</option>
+				<option>Shean GeForce GTX 980 GAMER XL</option>
+				<option>MSI Radeon R9 390X GAMING 8G LE</option>
+				<option>MSI Radeon RX 580 GAMING 4G</option>
+				<option>ASUS AREZ Strix Radeon RX 580</option>
+				<option>GIGABYTE AORUS Radeon RX580 4G</option>
+				<option>ASUS Dual Series Radeon RX 580 OC Edition</option>
+				<option>MSI Radeon RX 580 GAMING 8G</option>
+				<option>MSI Radeon RX 580 GAMING X 4G</option>
+				<option>ASRock Phantom Gaming D Radeon RX580 8G OC</option>
+				<option>ASRock Phantom Gaming X Radeon RX580 8G OC</option>
+				<option>GIGABYTE AORUS Radeon RX580 8G</option>
+				<option>MSI Radeon R9 390X GAMING 8G</option>
+				<option>MSI Radeon RX 580 GAMING X 8G</option>
+				<option>MSI Radeon RX 580 GAMING+ 8G</option>
+				<option>MSI Radeon RX 580 GAMING X+ 8G</option>
+				<option>MSI GeForce GTX 980 Ti GAMING 6G LE</option>
+				<option>ASRock Phantom Gaming X Radeon RX590 8G OC</option>
+				<option>EVGA GeForce GTX 1070 GAMING</option>
+				<option>NVIDIA GeForce GTX 1070 Founders Edition</option>
+				<option>MSI GeForce GTX 980 Ti GAMING 6G</option>
+				<option>ZOTAC GeForce GTX 1070 Mini</option>
+				<option>MSI GeForce GTX 980 Ti GAMING 6G GOLDEN EDITION</option>
+				<option>MSI GeForce GTX 1070 GAMING 8G</option>
+				<option>EVGA GeForce GTX 1070 FTW2 GAMING</option>
+				<option>MSI GeForce GTX 1070 GAMING X 8G</option>
+				<option>ASUS ROG Strix GeForce GTX 1070 OC Edition</option>
+				<option>GIGABYTE AORUS GeForce GTX 1070 8G</option>
+				<option>ZOTAC GeForce GTX 1070 AMP Extreme</option>
+				<option>MSI GeForce GTX 1070 GAMING Z 8G</option>
+				<option>AMD Radeon RX Vega 56</option>
+				<option>ASRock Phantom Gaming X Radeon RX VEGA 56 8G</option>
+				<option>ASUS ROG Strix GeForce GTX 1070 Ti Advanced Edition</option>
+				<option>MSI GeForce GTX 1070 Ti GAMING 8G</option>
+				<option>MSI GeForce GTX 1070 Ti Titanium 8G</option>
+				<option>NVIDIA GeForce GTX 1070 Ti Founders Edition</option>
+				<option>ASUS AREZ Strix Radeon RX VEGA 56 OC Edition</option>
+				<option>NVIDIA GeForce RTX 2060 Founders Edition</option>
+				<option>EVGA GeForce GTX 1080 GAMING</option>
+				<option>NVIDIA GeForce GTX 1080 Founders Edition</option>
+				<option>AMD Radeon RX Vega 64</option>
+				<option>ZOTAC GeForce GTX 1080 Mini</option>
+				<option>ASUS ROG Strix RX VEGA64 OC Edition</option>
+				<option>MSI GeForce GTX 1080 GAMING 8G</option>
+				<option>MSI GeForce GTX 1080 GAMING X 8G</option>
+				<option>MSI GeForce GTX 1080 GAMING+ 8G</option>
+				<option>GIGABYTE AORUS GeForce GTX 1080 8G</option>
+				<option>ASUS ROG Strix GeForce GTX 1080 OC Edition</option>
+				<option>NVIDIA GeForce RTX 2070 Founders Edition</option>
+				<option>MSI GeForce GTX 1080 GAMING Z 8G</option>
+				<option>MSI GeForce GTX 1080 GAMING X+ 8G</option>
+				<option>ZOTAC GeForce GTX 1080 AMP Extreme</option>
+				<option>GIGABYTE AORUS GeForce GTX 1080 Xtreme Edition 8G</option>
+				<option>AMD Radeon RX 5700</option>
+				<option>EVGA GeForce GTX 1080 Ti GAMING</option>
+				<option>NVIDIA GeForce GTX 1080 Ti Founders Edition</option>
+				<option>EVGA GeForce RTX 2070 FTW3 ULTRA GAMING</option>
+				<option>GIGABYTE AORUS GeForce RTX 2070 XTREME 8G</option>
+				<option>ZOTAC GeForce GTX 1080 Ti Mini</option>
+				<option>MSI GeForce GTX 1080 Ti GAMING 11G</option>
+				<option>AMD Radeon VII</option>
+				<option>ASUS ROG Strix GeForce GTX 1080 Ti OC Edition</option>
+				<option>AMD Radeon RX 5700 XT</option>
+				<option>MSI GeForce GTX 1080 Ti GAMING X 11G</option>
+				<option>EVGA GeForce GTX 1080 Ti K|NGP|N GAMING</option>
+				<option>GIGABYTE AORUS GeForce GTX 1080 Ti 11G</option>
+				<option>ZOTAC GeForce GTX 1080 Ti AMP Extreme</option>
+				<option>GIGABYTE AORUS GeForce GTX 1080 Ti Xtreme Edition 11G</option>
+				<option>NVIDIA GeForce RTX 2080 Founders Edition</option>
+				<option>EVGA GeForce RTX 2080 FTW3 ULTRA GAMING</option>
+				<option>GIGABYTE AORUS GeForce RTX 2080 XTREME 8G</option>
+				<option>NVIDIA GeForce RTX 2080 Ti Founders Edition</option>
+				<option>Colorful iGame GeForce RTX 2080 Ti Advanced OC</option>
+				<option>EVGA GeForce RTX 2080 Ti FTW3 ULTRA GAMING</option>
+				<option>Colorful iGame GeForce RTX 2080 Ti Vulcan X OC</option>
+				<option>GIGABYTE AORUS GeForce RTX 2080 Ti XTREME 11G</option>
+			</datalist>
+			<datalist id="mobolist">
+				<option>GIGABYTE GA-AB350M-Gaming 3</option>
+				<option>GIGABYTE B450 AORUS M</option>
+				<option>ASRock B450M Steel Legend</option>
+				<option>Mortoni H170 Mtech</option>
+				<option>Colorful CVN B365M GAMING PRO V20</option>
+				<option>ASRock B450 Steel Legend</option>
+				<option>GIGABYTE GA-AB350-Gaming 3</option>
+				<option>EVGA X299 Micro</option>
+				<option>GIGABYTE B360N AORUS GAMING WIFI</option>
+				<option>GIGABYTE B360 AORUS GAMING 3</option>
+				<option>ASRock Z390M Pro4</option>
+				<option>ASRock Z390 Pro4</option>
+				<option>ASRock Z390 Phantom Gaming 4</option>
+				<option>Colorful CVN Z390M GAMING PRO V20</option>
+				<option>GIGABYTE H370 AORUS GAMING 3</option>
+				<option>ASRock Z390M-ITX/ac</option>
+				<option>MSI B450 TOMAHAWK</option>
+				<option>Mortoni H170 Mtech plus</option>
+				<option>Mortoni A320M Mtech plus</option>
+				<option>ASUS TUF Z370-PRO GAMING</option>
+				<option>GIGABYTE B360M AORUS GAMING 3</option>
+				<option>ASUS TUF Z370-PLUS GAMING</option>
+				<option>ASUS PRIME X470-PRO</option>
+				<option>ASRock Z390 Phantom Gaming SLI/ac</option>
+				<option>ASUS PRIME Z370-A</option>
+				<option>GIGABYTE GA-B250M-Gaming 5</option>
+				<option>GIGABYTE Z370 AORUS Ultra Gaming</option>
+				<option>MSI Z270 Gaming Pro Carbon</option>
+				<option>ASRock Z390 Extreme 4</option>
+				<option>MSI B450I GAMING PLUS AC</option>
+				<option>ASUS ROG Strix Z370-G Gaming (Wi-Fi AC)</option>
+				<option>GIGABYTE GA-AX370-Gaming 5</option>
+				<option>ASRock Z390 Phantom Gaming ITX/ac</option>
+				<option>ASUS ROG Strix X470-F Gaming</option>
+				<option>MSI Z370 Gaming Pro Carbon</option>
+				<option>DFL H170 4TUNE X</option>
+				<option>DFL A320M 4TUNE X</option>
+				<option>ASRock Z390 Phantom Gaming 6</option>
+				<option>ASUS ROG Strix Z370-I Gaming</option>
+				<option>EVGA Z370 FTW</option>
+				<option>EVGA X299 FTW K</option>
+				<option>MSI MPG Z390 GAMING PRO CARBON</option>
+				<option>ASUS ROG Strix X470-I Gaming</option>
+				<option>ASUS ROG Strix Z370-E Gaming</option>
+				<option>GIGABYTE GA-AX370-Gaming K7</option>
+				<option>ASRock Z390 Taichi</option>
+				<option>EVGA Z270 FTW K</option>
+				<option>GIGABYTE X470 AORUS GAMING 7 WIFI</option>
+				<option>NZXT N7 Z370 (White)</option>
+				<option>NZXT N7 Z370 (Black)</option>
+				<option>GIGABYTE Z370 AORUS Gaming 7</option>
+				<option>ASUS ROG Maximus X Hero (Wi-Fi AC)</option>
+				<option>Colorful iGame Z390 Vulcan X V20</option>
+				<option>ASRock Z390 Phantom Gaming 9</option>
+				<option>ASUS ROG Crosshair VII Hero (WI-FI)</option>
+				<option>NZXT N7 Z390 (White)</option>
+				<option>NZXT N7 Z390 (Black)</option>
+				<option>ASUS ROG Maximus X Code</option>
+				<option>ASRock Z390 Taichi Ultimate</option>
+				<option>ASUS ROG Strix X299-E Gaming</option>
+				<option>EVGA Z270 Classified K</option>
+				<option>ASUS ROG Strix X399-E Gaming</option>
+				<option>GIGABYTE X299 DESIGNARE EX</option>
+				<option>ASUS TUF X299 MARK 1</option>
+				<option>ASUS ROG Maximus X Formula</option>
+				<option>MSI X399 Gaming Pro Carbon AC</option>
+				<option>GIGABYTE X399 AORUS Gaming 7</option>
+				<option>ASUS ROG Maximus X Apex</option>
+				<option>GIGABYTE X399 DESIGNARE EX</option>
+				<option>GIGABYTE X299 AORUS Gaming 9</option>
+				<option>GIGABYTE GA-Z270X-Gaming 8</option>
+				<option>ASUS PRIME X299-DELUXE</option>
+				<option>ASUS ROG ZENITH EXTREME</option>
+				<option>ASUS ROG Rampage VI Apex</option>
+				<option>ASUS ROG Rampage VI Extreme</option>
+			</datalist>
+			
+			<div id="first">
+				<div id="scoreCalculator">
+					<table>
+						<caption>Score Calculator</caption>
+						<form id="scoreCForm">
+							<tr>
+								<td>Processor:</td>
+								<td><input required name="cpu1" list="cpuList" onchange="showAvailableRamSpeed(this.value,rams1);showAvailableRamChannel(this.value,ramc1)"></input></td>
+							</tr>
+							<tr>
+								<td>Ram Speed</td>
+								<td>
+									<select name="rams1">
+										<option>1866</option>
+										<option>2133</option>
+										<option>2400</option>
+										<option>2600</option>
+										<option>2666</option>
+										<option>2667</option>
+										<option>2800</option>
+										<option>2933</option>
+										<option>3000</option>
+										<option>3066</option>
+										<option>3200</option>
+										<option>3300</option>
+										<option>3333</option>
+										<option>3400</option>
+										<option>3466</option>
+										<option>3600</option>
+										<option>3666</option>
+										<option>3733</option>
+										<option>3800</option>
+										<option>3866</option>
+										<option>4000</option>
+										<option>4133</option>
+										<option>4200</option>
+										<option>4266</option>
+										<option>4300</option>
+										<option>4333</option>
+										<option>4400</option>
+										<option>4500</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Ram Channel</td>
+								<td>
+									<select name="ramc1">
+										<option value="1">Single</option>
+										<option value="2">Dual</option>
+										<option value="3">Trio</option>
+										<option value="4">Quad</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Graphics Card</td>
+								<td><input required name="gpu1" list="gpuList"></input></td>
+							</tr>
+							<tr>
+								<td>Sli/Crossfire</td>
+								<td>
+									<select name="slicf1">
+										<option value="1" selected>No</option>
+										<option value="2">Yes</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td><button type="button" onclick="scoreCalculatorCal();saveBuild(cpu1.value,ramc1.value,rams1.value,gpu1.value,slicf1.value,'-','-',scoreCalculatorCal()[2],'-',scoreCalculatorCal()[1],scoreCalculatorCal()[0],'scorecalculator','-')">Calculate</button></td>
+							</tr>
+						</form>
+						<tr></tr>
+						<tr></tr>
+						<tr></tr>
+						<tr>
+							<td>CPU score :</td>
+							<td id="cpuScoreResult1"></td>
+						</tr>
+						<tr>
+							<td>GPU score :</td>
+							<td id="gpuScoreResult1"></td>
+						</tr>
+						<tr>
+							<td>Total score :</td>
+							<td id="totalScoreResult1"></td>
+						</tr>
+						<tr>
+							<td>Est. Wattage :</td>
+							<td id="wattageResult1"></td>
+						</tr>
+						<tr></tr>
+						<tr></tr>
+						<tr>
+							<td>CPU Price (New):</td>
+							<td id="cpuPrice1"></td>
+						</tr>
+						<tr>
+							<td>CPU Price (Used):</td>
+							<td id="cpuUsedPrice1"></td>
+						</tr>
+						<tr>
+							<td>GPU Price (New):</td>
+							<td id="gpuPrice1"></td>
+						</tr>
+						<tr>
+							<td>GPU Price (Used):</td>
+							<td id="gpuUsedPrice1"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div id="second">
+				<div id="buildMaker">
+					<table>
+						<caption>Build Maker</caption>
+						<form id="buildForm">
+							<tr>
+								<td>
+									Budget
+								</td>
+								<td>
+									<input required name="budget1"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Reserved Budget
+								</td>
+								<td>
+									<input name="resbudget1" placeholder="400"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Score
+								</td>
+								<td>
+									<input required name="score1"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Score Offset
+								</td>
+								<td>
+									<input name="offset1" placeholder="200"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Level
+								</td>
+								<td>
+									<input required name="level1"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									No Of Results
+								</td>
+								<td>
+									<input name="results1" placeholder="10"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Build Architecture
+								</td>
+								<td>
+									<select name="architecture1">
+										<option selected>Any</option>
+										<option value="skylake">Skylake</option>
+										<option value="kabylake">Kabylake</option>
+										<option value="coffeelake">Coffeelake</option>
+										<option value="xseries">X-series</option>
+										<option value="ryzen">Ryzen</option>
+										<option value="threadripper">Threadripper</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Include motherboard
+								</td>
+								<td>
+									<input type="checkbox" name="incmobo1"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Include ram
+								</td>
+								<td>
+									<input type="checkbox" name="incram1"></input>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									Need Overclock
+								</td>
+								<td>
+									<input type="checkbox" name="needoc1"></input>
+								</td>
+							</tr>
+							<tr>
+								<td><button type="button" onclick="generateBuild()">Calculate</button></td>
+							</tr>
+						</form>
+					</table>
+				</div>
+				<div id="buildMakerResults">
+					<table id="buildMakerTable">
+						<tr>
+							<td>CPU</td>
+							<td>Ram Channel</td>
+							<td>Ram Speed</td>
+							<td>GPU</td>
+							<td>SliCf</td>
+							<td>Motherboard</td>
+							<td>Ram</td>
+							<td>Cost</td>
+							<td>Budget Left</td>
+							<td>Est. Wattage</td>
+							<td>Score</td>
+							<td>Save</td>
+						</tr>
+					</table>
+				</div>
+				<div id="saveBuildBackground">
+					<form id="saveForm">
+						<input type="search" name="remarks" placeholder="Remarks"></input>
+						<button type="button" onclick="unblurBackground(document.getElementById('buildMaker'));unblurBackground(document.getElementById('buildMakerResults'));hideSaver(document.getElementById('saveBuildBackground'));savePcBuild(document.getElementById('buildMakerTable').rows[temp],'build',document.getElementById('saveForm').remarks.value);">Save</button>
+						<button type="button" onclick="unblurBackground(document.getElementById('buildMaker'));unblurBackground(document.getElementById('buildMakerResults'));hideSaver(document.getElementById('saveBuildBackground'))">Cancel</button>
+					</form>
+				</div>
+			</div>
+			<div id="third">
+				<div id="buildUpgrader">
+					<table>
+						<form id="upgradeForm" name="upgradeForm">
+							<caption>
+								Build Upgrader
+							</caption>
+							<tr>
+								<td>Current Processor</td>
+								<td><input required name="currentProc1" list="cpuList" type="search" onchange="showAvailableRamChannel(this.value,currentRamC1);showAvailableRamSpeed(this.value,currentRamS1);showAvailableMotherboard(this.value,currentGpu1.value,currentSlicf1.value,currentMobo1)"></td>
+							</tr>
+							<tr>
+								<td>Current Ram Channel</td>
+								<td>
+									<select name="currentRamC1">
+										<option value="1" selected>Single</option>
+										<option value="2">Dual</option>
+										<option value="3">Trio</option>
+										<option value="4">Quad</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Current Ram Speed</td>
+								<td>
+									<select name="currentRamS1">
+										<option>1866</option>
+										<option>2133</option>
+										<option>2400</option>
+										<option>2600</option>
+										<option>2666</option>
+										<option>2667</option>
+										<option>2800</option>
+										<option>2933</option>
+										<option>3000</option>
+										<option>3066</option>
+										<option>3200</option>
+										<option>3300</option>
+										<option>3333</option>
+										<option>3400</option>
+										<option>3466</option>
+										<option>3600</option>
+										<option>3666</option>
+										<option>3733</option>
+										<option>3800</option>
+										<option>3866</option>
+										<option>4000</option>
+										<option>4133</option>
+										<option>4200</option>
+										<option>4266</option>
+										<option>4300</option>
+										<option>4333</option>
+										<option>4400</option>
+										<option>4500</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Current GPU</td>
+								<td><input required name="currentGpu1" list="gpuList" onchange="showAvailableMotherboard(currentProc1.value,this.value,currentSlicf1.value,currentMobo1)"></td>
+							</tr>
+							<tr>
+								<td>Current Sli/Cf</td>
+								<td>
+									<select name="currentSlicf1" onchange="showAvailableMotherboard(currentProc1.value,currentGpu1.value,this.value,currentMobo1)">
+										<option value="1" selected>No</option>
+										<option value="2">Yes</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Current Motherboard</td>
+								<td>
+									<select name="currentMobo1">
+										<option>GIGABYTE GA-AB350M-Gaming 3</option>
+										<option>GIGABYTE B450 AORUS M</option>
+										<option>ASRock B450M Steel Legend</option>
+										<option>Mortoni H170 Mtech</option>
+										<option>Colorful CVN B365M GAMING PRO V20</option>
+										<option>ASRock B450 Steel Legend</option>
+										<option>GIGABYTE GA-AB350-Gaming 3</option>
+										<option>EVGA X299 Micro</option>
+										<option>GIGABYTE B360N AORUS GAMING WIFI</option>
+										<option>GIGABYTE B360 AORUS GAMING 3</option>
+										<option>ASRock Z390M Pro4</option>
+										<option>ASRock Z390 Pro4</option>
+										<option>ASRock Z390 Phantom Gaming 4</option>
+										<option>Colorful CVN Z390M GAMING PRO V20</option>
+										<option>GIGABYTE H370 AORUS GAMING 3</option>
+										<option>ASRock Z390M-ITX/ac</option>
+										<option>MSI B450 TOMAHAWK</option>
+										<option>Mortoni H170 Mtech plus</option>
+										<option>Mortoni A320M Mtech plus</option>
+										<option>ASUS TUF Z370-PRO GAMING</option>
+										<option>GIGABYTE B360M AORUS GAMING 3</option>
+										<option>ASUS TUF Z370-PLUS GAMING</option>
+										<option>ASUS PRIME X470-PRO</option>
+										<option>ASRock Z390 Phantom Gaming SLI/ac</option>
+										<option>ASUS PRIME Z370-A</option>
+										<option>GIGABYTE GA-B250M-Gaming 5</option>
+										<option>GIGABYTE Z370 AORUS Ultra Gaming</option>
+										<option>MSI Z270 Gaming Pro Carbon</option>
+										<option>ASRock Z390 Extreme 4</option>
+										<option>MSI B450I GAMING PLUS AC</option>
+										<option>ASUS ROG Strix Z370-G Gaming (Wi-Fi AC)</option>
+										<option>GIGABYTE GA-AX370-Gaming 5</option>
+										<option>ASRock Z390 Phantom Gaming ITX/ac</option>
+										<option>ASUS ROG Strix X470-F Gaming</option>
+										<option>MSI Z370 Gaming Pro Carbon</option>
+										<option>DFL H170 4TUNE X</option>
+										<option>DFL A320M 4TUNE X</option>
+										<option>ASRock Z390 Phantom Gaming 6</option>
+										<option>ASUS ROG Strix Z370-I Gaming</option>
+										<option>EVGA Z370 FTW</option>
+										<option>EVGA X299 FTW K</option>
+										<option>MSI MPG Z390 GAMING PRO CARBON</option>
+										<option>ASUS ROG Strix X470-I Gaming</option>
+										<option>ASUS ROG Strix Z370-E Gaming</option>
+										<option>GIGABYTE GA-AX370-Gaming K7</option>
+										<option>ASRock Z390 Taichi</option>
+										<option>EVGA Z270 FTW K</option>
+										<option>GIGABYTE X470 AORUS GAMING 7 WIFI</option>
+										<option>NZXT N7 Z370 (White)</option>
+										<option>NZXT N7 Z370 (Black)</option>
+										<option>GIGABYTE Z370 AORUS Gaming 7</option>
+										<option>ASUS ROG Maximus X Hero (Wi-Fi AC)</option>
+										<option>Colorful iGame Z390 Vulcan X V20</option>
+										<option>ASRock Z390 Phantom Gaming 9</option>
+										<option>ASUS ROG Crosshair VII Hero (WI-FI)</option>
+										<option>NZXT N7 Z390 (White)</option>
+										<option>NZXT N7 Z390 (Black)</option>
+										<option>ASUS ROG Maximus X Code</option>
+										<option>ASRock Z390 Taichi Ultimate</option>
+										<option>ASUS ROG Strix X299-E Gaming</option>
+										<option>EVGA Z270 Classified K</option>
+										<option>ASUS ROG Strix X399-E Gaming</option>
+										<option>GIGABYTE X299 DESIGNARE EX</option>
+										<option>ASUS TUF X299 MARK 1</option>
+										<option>ASUS ROG Maximus X Formula</option>
+										<option>MSI X399 Gaming Pro Carbon AC</option>
+										<option>GIGABYTE X399 AORUS Gaming 7</option>
+										<option>ASUS ROG Maximus X Apex</option>
+										<option>GIGABYTE X399 DESIGNARE EX</option>
+										<option>GIGABYTE X299 AORUS Gaming 9</option>
+										<option>GIGABYTE GA-Z270X-Gaming 8</option>
+										<option>ASUS PRIME X299-DELUXE</option>
+										<option>ASUS ROG ZENITH EXTREME</option>
+										<option>ASUS ROG Rampage VI Apex</option>
+										<option>ASUS ROG Rampage VI Extreme</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>Budget</td>
+								<td><input required name="budget2"/></td>
+							</tr>
+							<tr>
+								<td>Budget For Other Parts</td>
+								<td><input name="resbudget2" placeholder="0"/></td>
+							</tr>
+							<tr>
+								<td>Target Score</td>
+								<td><input required name="score2"/></td>
+							</tr>
+							<tr>
+								<td>Score Offset</td>
+								<td><input name="offset2" placeholder="200"/></td>
+							</tr>
+							<tr>
+								<td>Level</td>
+								<td><input required name="level2"/></td>
+							</tr>
+							<tr>
+								<td>Number Of Result</td>
+								<td><input name="results2" placeholder="10"/></td>
+							</tr>
+							<tr>
+								<td><button onclick="upgradeBuild()" type="button">Upgrade</button></td>
+							</tr>
+						</form>
+					</table>
+				</div>
+				<div id="upgradeResults">
+					<table id="buildUpgraderTable">
+						<tr>
+							<td>CPU</td>
+							<td>Ram Channel</td>
+							<td>Ram Speed</td>
+							<td>GPU</td>
+							<td>SliCf</td>
+							<td>Motherboard</td>
+							<td>Ram</td>
+							<td>Cost</td>
+							<td>Budget Left</td>
+							<td>Est. Wattage</td>
+							<td>Score</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div id="forth">
+				<div id="scoreCalculatorHistory">
+					<h1>Score Calculator History</h1>
+					<table id="scoreCalculatorHistoryTable">
+						<tr>
+							<td>CPU</td>
+							<td>Ram Channel</td>
+							<td>Ram Speed</td>
+							<td>GPU</td>
+							<td>SliCf</td>
+							<td>Motherboard</td>
+							<td>Ram</td>
+							<td>Cost</td>
+							<td>Budget Left</td>
+							<td>Est. Wattage</td>
+							<td>Score</td>
+							<td>Remarks</td>
+						</tr>
+					</table>
+				</div>
+				<div id="buildMakerHistory">
+					<h1>Build Maker History</h1>
+					<table id="buildMakerHistoryTable">
+						<tr>
+							<td>CPU</td>
+							<td>Ram Channel</td>
+							<td>Ram Speed</td>
+							<td>GPU</td>
+							<td>SliCf</td>
+							<td>Motherboard</td>
+							<td>Ram</td>
+							<td>Cost</td>
+							<td>Budget Left</td>
+							<td>Est. Wattage</td>
+							<td>Score</td>
+							<td>Remarks</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

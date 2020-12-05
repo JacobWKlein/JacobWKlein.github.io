@@ -1,0 +1,15 @@
+SPOILER_CPU.txt.html
+> Console
+> document.write(JSON.stringify(results))
+
+SPOILER_GPU.txt.html
+> Console
+> document.write(JSON.stringify(results))
+
+SPOILER_Motherboard.txt.html
+> Console
+> document.write(JSON.stringify(results))
+
+SPOILER_RAM.txt.html
+> Console
+> document.write(JSON.stringify(results))

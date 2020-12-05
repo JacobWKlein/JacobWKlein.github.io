@@ -1,0 +1,190 @@
+[8:09 PM] Jacob Klein (PUC_Snakeman): I hate to bother you again ... but ... Is there any chance you could help me with those formulas you provided? I'm not having any luck figuring them out ... and ... 1) an example would help tremendously, and 2) any source code you have to create the memory table would also be super helpful
+[11:43 PM] Dont Ask: memory table ?
+[11:43 PM] Jacob Klein (PUC_Snakeman): Yes. Your .html file has tables for each CPU, based on memory channels and speeds. I can't figure out your equations that you gave me though.
+[11:43 PM] Dont Ask: which file name
+[11:44 PM] Jacob Klein (PUC_Snakeman): Your "HTML Calculator" guide for PCBS Simulator --- new.html
+[11:46 PM] Dont Ask: hmm which table
+[11:46 PM] Dont Ask: you mean the results table ?
+[11:47 PM] Jacob Klein (PUC_Snakeman): var data = {
+    "procs"
+[11:47 PM] Dont Ask: those are the pregenerated scores for the parts
+[11:48 PM] Jacob Klein (PUC_Snakeman): Like, this table
+
+        "Intel Celeron G3900": {
+            "1": {
+                "2133": 784,
+                "2400": 833,
+                "2600": 869,
+                "2666": 882,
+                "2800": 906,
+                "3000": 943,
+                "3200": 979,
+                "3300": 998,
+                "3333": 1004,
+                "3400": 1016,
+                "3466": 1028,
+                "3600": 1052,
+                "3666": 1064,
+                "3733": 1077,
+                "3800": 1089,
+                "3866": 1101,
+                "4000": 1126,
+                "4133": 1150
+            },
+            "2": {
+                "2133": 879,
+                "2400": 928,
+                "2600": 964,
+                "2666": 977,
+                "2800": 1001,
+                "3000": 1038,
+                "3200": 1074,
+                "3300": 1093,
+                "3333": 1099,
+                "3400": 1111,
+                "3466": 1123,
+                "3600": 1147,
+                "3666": 1160,
+                "3733": 1172,
+                "3800": 1184,
+                "3866": 1196,
+                "4000": 1221,
+                "4133": 1245
+            },
+            "fullName": "Intel Celeron G3900",
+            "partName": "Celeron G3900",
+            "manufacturer": "Intel",
+            "price": 45,
+            "sellPrice": 15,
+            "level": 1,
+            "baseFreq": 2800,
+            "baseScore": 879,
+            "cores": 2,
+            "oc": "No",
+            "wattage": 51,
+            "voltage": 1.1,
+            "maxfreq": 2800,
+            "maxvolt": 1.6,
+            "mulstep": 0,
+            "dies": 1,
+            "maxchan": 2,
+            "socket": "1151V1",
+            "type": "skylake",
+            "cclockm": 0.006022,
+            "mchanm": 0.318855,
+            "mclockm": 0.000614,
+            "adj": -15.8576
+        },
+
+... How can I populate it, for new parts?
+[11:48 PM] Jacob Klein (PUC_Snakeman): (I know how to get everything after "fullName")
+[11:48 PM] Jacob Klein (PUC_Snakeman): (But I don't know how to get the "per-memory-channel per-memory-speed" values)
+[11:49 PM] Dont Ask: check data digger/cpu.html
+[11:49 PM] Jacob Klein (PUC_Snakeman): where can I find that?
+[11:50 PM] Dont Ask: in the folder i sent you ?
+[11:50 PM] Jacob Klein (PUC_Snakeman):
+
+[11:50 PM] Dont Ask: or did i not include that
+[11:50 PM] Jacob Klein (PUC_Snakeman): What you see, is what you sent, I think.
+[11:50 PM] Dont Ask: open cpu.html
+[11:51 PM] Jacob Klein (PUC_Snakeman): Okay, it's open.
+[11:51 PM] Dont Ask: as long as the stuff dont change it should work for the next update
+[11:51 PM] Dont Ask: scroll to the very bottom
+[11:51 PM] Jacob Klein (PUC_Snakeman): I need to be able to do it for new parts tho
+[11:51 PM] Dont Ask: theres a script below
+[11:52 PM] Dont Ask:
+
+[11:52 PM] Dont Ask: as long as the highlighted parts dont increase/decrease
+[11:52 PM] Dont Ask: the script should work
+[11:52 PM] Jacob Klein (PUC_Snakeman): Right. What you highlighted, I can get from TextAssets. I am seeing the script in this file for the first time.
+[11:52 PM] Jacob Klein (PUC_Snakeman): [you didn't mention it existed, before]
+[11:53 PM] Dont Ask: did i ?
+[11:53 PM] Jacob Klein (PUC_Snakeman): You gave me an equation that I couldn't decode.
+[11:53 PM] Jacob Klein (PUC_Snakeman): I'm looking at this now:
+[11:53 PM] Dont Ask: the script basically does all the job for you already
+[11:53 PM] Jacob Klein (PUC_Snakeman): Can you help me understand it please?
+[11:54 PM] Dont Ask: im gonna start from here
+[11:54 PM] Dont Ask: for(a=1;a<results[itemName].maxchan+1;a++){
+            var speeds;
+            if(results[itemName].socket == "AM4"){
+                speeds = AM4speeds
+            }else if(results[itemName].socket == "1151V1"){
+                speeds = _1151V1speeds
+            }else if(results[itemName].socket == "1151V2"){
+                speeds = _1151V2speeds
+            }else if(results[itemName].socket == "LGA 2066"){
+                speeds = LGA2066speeds
+            }else if(results[itemName].socket == "TR4"){
+                speeds = TR4speeds
+            }
+            for(ii of speeds){
+                if(results[itemName][a] == undefined){
+                    results[itemName][a] = {}
+                    results[itemName][a][ii] = Math.floor(298((results[itemName].cclockmresults[itemName].baseFreq) + (results[itemName].mchanma) + (results[itemName].mclockmii) + results[itemName].adj))
+                }else{
+                    results[itemName][a][ii] = Math.floor(298((results[itemName].cclockmresults[itemName].baseFreq) + (results[itemName].mchanma) + (results[itemName].mclockmii) + results[itemName].adj))
+                }
+            }
+        }
+[11:54 PM] Dont Ask: the loop for a would be the max channels for the motherboard
+[11:55 PM] Dont Ask: 'a'
+[11:55 PM] Jacob Klein (PUC_Snakeman): Right.
+[11:55 PM] Jacob Klein (PUC_Snakeman): It picks a speeds array i see
+[11:55 PM] Jacob Klein (PUC_Snakeman): [i can read some code]
+[11:55 PM] Dont Ask: speeds would be all the memory steps of the motherboard that supports the processor
+[11:56 PM] Dont Ask: you can try open the file in chrome
+[11:56 PM] Jacob Klein (PUC_Snakeman): Firefox.
+[11:56 PM] Dont Ask: open the console and type document.write(JSON.stringify(results))
+[11:57 PM] Dont Ask: it works either way
+[11:57 PM] Jacob Klein (PUC_Snakeman): wow.
+[11:58 PM] Jacob Klein (PUC_Snakeman): About the variables though..
+[11:58 PM] Jacob Klein (PUC_Snakeman): Is "ii" the memory speed?
+[11:59 PM] Dont Ask: yes
+[12:00 AM] Dont Ask: ngl its a pretty bad code XD
+[12:00 AM] Dont Ask: it can be more simplified
+[12:00 AM] Jacob Klein (PUC_Snakeman): Is "baseFreq" the base frequency of the CPU, right?
+[12:00 AM] Dont Ask: yep
+[12:02 AM] Jacob Klein (PUC_Snakeman): Okay. I might have enough to do a 2nd attempt at understanding it more later. :slight_smile: Your variable names are quite confusing lol
+[12:02 AM] Dont Ask: :v
+[12:02 AM] Jacob Klein (PUC_Snakeman): Hmm... So .... This does NOT take into account any cpu overclocking or memory overclocking, correct?
+[12:02 AM] Dont Ask: nope
+[12:02 AM] Jacob Klein (PUC_Snakeman): nope=correct ?
+[12:02 AM] Dont Ask: i mean yea
+[12:03 AM] Dont Ask:
+nope=correct ?
+^^
+[12:03 AM] Jacob Klein (PUC_Snakeman): My question sucked.
+[12:03 AM] Jacob Klein (PUC_Snakeman): Looking at the GPU one now..
+[12:03 AM] Dont Ask: theres alot of factor to look into when overclocking
+[12:03 AM] Dont Ask: the airflow, the heat generated, and so on..
+[12:04 AM] Dont Ask: its gonna be a pain in the ass
+[12:04 AM] Jacob Klein (PUC_Snakeman): For GPU, the game gives columns for Single GPU Score, and Dual GPU Score.  Meaning we can just ignore the other factors/calc columns?
+[12:04 AM] Dont Ask: yep
+[12:05 AM] Jacob Klein (PUC_Snakeman): At one point, you sent me:
+gpuscore = 328/((1/(1coremcore) + (1memmmem) + 1adj)+(1/(2coremcore) + (2memmmem) + 2adj))
+cpuscore = 298((coremfreqMhz) + (memcm* memc) + (memclockm*memclock) + this.m_adjustment)
+
+..... Do you use that gpuscore "328" calc anywhere? I'm not seeing it in these 4 html files.
+[12:06 AM] Dont Ask:
+open the console and type document.write(JSON.stringify(results))
+^^
+[12:06 AM] Dont Ask: nah i didnt use those
+[12:06 AM] Dont Ask: that was for when i was thinking of overclocking
+[12:07 AM] Dont Ask: and realise its a pain
+[12:07 AM] Jacob Klein (PUC_Snakeman): It really confused me earlier today and sent me down the wrong paths.
+[12:08 AM] Jacob Klein (PUC_Snakeman): So .. I can run "document.write(JSON.stringify(results))" on any of these 4 files, to see the calcs in action
+[12:09 AM] Dont Ask: yes
+[12:10 AM] Jacob Klein (PUC_Snakeman): And ... did you use these stringify outputs, as inputs to your "new.html" calculator?
+[12:10 AM] Dont Ask: yes
+[12:10 AM] Dont Ask: just merge all the 4 results
+[12:10 AM] Jacob Klein (PUC_Snakeman): btw, I'm trying very hard to ask the right questions, because I still intend on maybe taking over your guide to update it for new versions etc.
+[12:11 AM] Dont Ask: equate it just like 
+the data: { 
+ in new.html
+[12:11 AM] Jacob Klein (PUC_Snakeman): Right
+[12:13 AM] Jacob Klein (PUC_Snakeman): For the 4 .html files ............... Is the "<table>" portion, a direct copy+paste from TextAsset
+[12:14 AM] Dont Ask: I suppose yes
+[12:14 AM] Jacob Klein (PUC_Snakeman): Verifying.
+[12:14 AM] Dont Ask: Not sure if your textasset is the same as what im using
+[12:16 AM] Jacob Klein (PUC_Snakeman): Mine's newer, but structure is equivalent.
+[12:16 AM] Jacob Klein (PUC_Snakeman): Besides these 4 .html files and the new.html file ..... are there any other files I might like to have?
