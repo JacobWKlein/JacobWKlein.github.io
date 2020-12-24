@@ -2549,8 +2549,8 @@
     "manufacturer": "GIGABYTE",
     "partName": "AORUS RGB",
     "inShop": "Yes",
-    "price": 545,
-    "sellPrice": 185,
+    "price": 485,
+    "sellPrice": 60,
     "level": 30,
     "totalSizeGB": 16,
     "frequency": 5000
@@ -2561,8 +2561,8 @@
     "manufacturer": "GIGABYTE",
     "partName": "AORUS RGB",
     "inShop": "Yes",
-    "price": 475,
-    "sellPrice": 150,
+    "price": 455,
+    "sellPrice": 60,
     "level": 30,
     "totalSizeGB": 8,
     "frequency": 5000
@@ -3130,53 +3130,5 @@
     "level": 31,
     "totalSizeGB": 8,
     "frequency": 6000
-  },
-  "SK Hynix LRDIMM 256 GB 2666 MHz": {
-    "isHEMPart": true,
-    "fullName": "SK Hynix LRDIMM 256 GB 2666 MHz",
-    "manufacturer": "SK Hynix",
-    "partName": "LRDIMM",
-    "inShop": "Yes",
-    "price": 3699,
-    "sellPrice": 2135,
-    "level": 32,
-    "totalSizeGB": 256,
-    "frequency": 2666
-  },
-  "SK Hynix LRDIMM 256 GB 2400 MHz": {
-    "isHEMPart": true,
-    "fullName": "SK Hynix LRDIMM 256 GB 2400 MHz",
-    "manufacturer": "SK Hynix",
-    "partName": "LRDIMM",
-    "inShop": "Yes",
-    "price": 3399,
-    "sellPrice": 1835,
-    "level": 31,
-    "totalSizeGB": 256,
-    "frequency": 2400
-  },
-  "SK Hynix LRDIMM 256 GB 2133 MHz": {
-    "isHEMPart": true,
-    "fullName": "SK Hynix LRDIMM 256 GB 2133 MHz",
-    "manufacturer": "SK Hynix",
-    "partName": "LRDIMM",
-    "inShop": "Yes",
-    "price": 3199,
-    "sellPrice": 1435,
-    "level": 31,
-    "totalSizeGB": 256,
-    "frequency": 2133
-  },
-  "SK Hynix LRDIMM 256 GB 2993 MHz": {
-    "isHEMPart": true,
-    "fullName": "SK Hynix LRDIMM 256 GB 2993 MHz",
-    "manufacturer": "SK Hynix",
-    "partName": "LRDIMM",
-    "inShop": "Yes",
-    "price": 3999,
-    "sellPrice": 2535,
-    "level": 32,
-    "totalSizeGB": 256,
-    "frequency": 2993
   }
 }

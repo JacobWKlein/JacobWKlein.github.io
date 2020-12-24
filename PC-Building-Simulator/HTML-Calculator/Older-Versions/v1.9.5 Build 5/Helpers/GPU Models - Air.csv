@@ -110,24 +110,6 @@ Prefabs/GPU/ZOTAC/ZOTAC_GeForce_1080TI_AmpExtreme,Prefabs/GPU/ZOTAC/ZOTAC_GeForc
 Prefabs/GPU/ZOTAC/ZOTAC_GeForce_GTX_1060_mini,Prefabs/GPU/ZOTAC/ZOTAC_GeForce_GTX_1060_mini,6-pin,2
 Prefabs/GPU/ZOTAC/ZOTAC_Geforce_GTX_1070_mini,Prefabs/GPU/ZOTAC/ZOTAC_Geforce_GTX_1070_mini,8-pin,2
 Prefabs/GPU/ZOTAC/ZOTAC_GeForce_GTX_1080Ti_mini,Prefabs/GPU/ZOTAC/ZOTAC_GeForce_GTX_1080Ti_mini,8-pin + 8-pin,2
-v1_10_0/Prefabs/GPU/ASUS/GPU_ASUS_GeForce_RTX_3070_OC_Edition_8GB_GDDR6,v1_10_0/Prefabs/GPU/ASUS/GPU_ASUS_GeForce_RTX_3070_OC_Edition_8GB_GDDR6,8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/ASUS/GPU_ASUS_ROG_Strix_GeForce_RTX_3090_O24G,v1_10_0/Prefabs/GPU/ASUS/GPU_ASUS_ROG_Strix_GeForce_RTX_3090_O24G,8-pin + 8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/ASUS/GPU_ASUS_TUF_Gaming_GeForce_RTX_3080_O10G,v1_10_0/Prefabs/GPU/ASUS/GPU_ASUS_TUF_Gaming_GeForce_RTX_3080_O10G,8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/Colorful/GPU_COLORFUL_IGAME_GEFORCE_RTX_3080_ADVANCED_10G-V,v1_10_0/Prefabs/GPU/Colorful/GPU_COLORFUL_IGAME_GEFORCE_RTX_3080_ADVANCED_10G-V,8-pin + 8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/Colorful/GPU_COLORFUL_IGAME_GEFORCE_RTX_3080_ULTRA_OC_10G-V,v1_10_0/Prefabs/GPU/Colorful/GPU_COLORFUL_IGAME_GEFORCE_RTX_3080_ULTRA_OC_10G-V,8-pin + 8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/Colorful/GPU_Colorful_iGame_GeForce_RTX_3080_Vulcan_10G_V,v1_10_0/Prefabs/GPU/Colorful/GPU_Colorful_iGame_GeForce_RTX_3080_Vulcan_10G_V,8-pin + 8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_GTX_1650_XC_Ultra_Black_Gaming,v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_GTX_1650_XC_Ultra_Black_Gaming,6-pin,3
-v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_GTX_1660_SUPER_SC_Ultra_Black_Gaming,v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_GTX_1660_SUPER_SC_Ultra_Black_Gaming,8-pin,2
-v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_GTX_1660_Ti_XC_Ultra_Gaming,v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_GTX_1660_Ti_XC_Ultra_Gaming,8-pin,2
-v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_3080_FTW3_ULTRA_GAMING,v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_3080_FTW3_ULTRA_GAMING,8-pin + 8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_3080_XC3_ULTRA_GAMING,v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_3080_XC3_ULTRA_GAMING,8-pin + 8-pin,2
-v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_3090_FTW3_ULTRA_GAMING,v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_3090_FTW3_ULTRA_GAMING,8-pin + 8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_3090_XC3_ULTRA_GAMING,v1_10_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_3090_XC3_ULTRA_GAMING,8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/MSI/GPU_MSI_Radeon_RX_5500_XT_Gaming_X_8G,v1_10_0/Prefabs/GPU/MSI/GPU_MSI_Radeon_RX_5500_XT_Gaming_X_8G,8-pin,2.5
-v1_10_0/Prefabs/GPU/MSI/GPU_MSI_Radeon_RX_5700_Evoke_GP_OC,v1_10_0/Prefabs/GPU/MSI/GPU_MSI_Radeon_RX_5700_Evoke_GP_OC,8-pin + 6-pin,2.5
-v1_10_0/Prefabs/GPU/NVidia/GPU_NVIDIA_GEFORCE_RTX_3070,v1_10_0/Prefabs/GPU/NVidia/GPU_NVIDIA_GEFORCE_RTX_3070,8-pin,2.5
-v1_10_0/Prefabs/GPU/NVidia/GPU_NVIDIA_GEFORCE_RTX_3080,v1_10_0/Prefabs/GPU/NVidia/GPU_NVIDIA_GEFORCE_RTX_3080,8-pin + 8-pin,2.5
-v1_10_0/Prefabs/GPU/NVidia/GPU_NVIDIA_GEFORCE_RTX_3090,v1_10_0/Prefabs/GPU/NVidia/GPU_NVIDIA_GEFORCE_RTX_3090,8-pin + 8-pin,3.5
 v1_7_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2060_SuperXC_Black_Gaming,v1_7_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2060_SuperXC_Black_Gaming,8-pin + 8-pin,2
 v1_7_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2070_SuperXC_Ultra_Overclocked,v1_7_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2070_SuperXC_Ultra_Overclocked,8-pin + 6-pin,3
 v1_7_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2080_Super_Black_Gaming,v1_7_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2080_Super_Black_Gaming,8-pin + 8-pin,2

@@ -1993,35 +1993,5 @@
     "speed": 4550,
     "includesHeatsink": "No",
     "heatsinkThickness": 0
-  },
-  "GIGABYTE SmartSSD 2TB": {
-    "isHEMPart": true,
-    "fullName": "GIGABYTE SmartSSD 2TB",
-    "manufacturer": "GIGABYTE",
-    "partName": "SmartSSD 2TB",
-    "inShop": "Yes",
-    "price": 950,
-    "sellPrice": 355,
-    "level": 27,
-    "sizeGB": 2000,
-    "type": "SSD",
-    "speed": 3200,
-    "includesHeatsink": "No",
-    "heatsinkThickness": 0
-  },
-  "GIGABYTE SmartSSD 4TB": {
-    "isHEMPart": true,
-    "fullName": "GIGABYTE SmartSSD 4TB",
-    "manufacturer": "GIGABYTE",
-    "partName": "SmartSSD 4TB",
-    "inShop": "Yes",
-    "price": 1550,
-    "sellPrice": 50,
-    "level": 27,
-    "sizeGB": 4000,
-    "type": "SSD",
-    "speed": 2900,
-    "includesHeatsink": "No",
-    "heatsinkThickness": 0
   }
 }
