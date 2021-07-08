@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="windows-1252" />
-    <title>PC Building Simulator - HTML Calculator v1.12 Build 1 - 3DMark Scores, Builds, Upgrades</title>
+    <title>PC Building Simulator - HTML Calculator v1.12 Build 2 - 3DMark Scores, Builds, Upgrades</title>
     <style>
         body {
             background-color: #000000;
@@ -42834,7 +42834,7 @@
                         "8366": 1,
                         "8400": 1
                     },
-                    "SP3r1": {
+                    "SP3": {
                         "2133": 1,
                         "2400": 1,
                         "2666": 1,
@@ -42855,41 +42855,8 @@
                         "4000": 1,
                         "4133": 1,
                         "4200": 1,
-                        "4300": 1,
-                        "4400": 1,
-                        "4500": 1,
-                        "4600": 1
-                    },
-                    "SP3r1 (2P)": {
-                        "2133": 1,
-                        "2400": 1,
-                        "2666": 1,
-                        "2667": 1,
-                        "2800": 1,
-                        "2933": 1,
-                        "3000": 1,
-                        "3200": 1,
-                        "3600": 1
-                    },
-                    "SP3r2": {
-                        "2133": 1,
-                        "2400": 1,
-                        "2666": 1,
-                        "2667": 1,
-                        "2800": 1,
-                        "2933": 1,
-                        "3200": 1,
-                        "3300": 1,
-                        "3333": 1,
-                        "3400": 1,
-                        "3466": 1,
-                        "3600": 1,
-                        "3733": 1,
-                        "3800": 1,
-                        "3866": 1,
-                        "4000": 1,
-                        "4133": 1,
                         "4266": 1,
+                        "4300": 1,
                         "4333": 1,
                         "4400": 1,
                         "4500": 1,
@@ -42919,13 +42886,14 @@
                         "6350": 1,
                         "6400": 1
                     },
-                    "SP3r2 (2P)": {
+                    "SP3 (2P)": {
                         "2133": 1,
                         "2400": 1,
                         "2666": 1,
                         "2667": 1,
                         "2800": 1,
                         "2933": 1,
+                        "3000": 1,
                         "3200": 1,
                         "3300": 1,
                         "3333": 1,
@@ -54487,8 +54455,16 @@
                 var socket1 = data.mobos[mobo].cpuSocket
                 var socket2 = data.cpus[cpu].cpuSocket
                 return (
+
                     (socket1 == "LGA 1151 (Skylake)" && socket2 == "LGA 1151 (Kaby Lake)") ||
                     (socket2 == "LGA 1151 (Skylake)" && socket1 == "LGA 1151 (Kaby Lake)") ||
+
+                    (socket1 == "SP3r1" && socket2 == "SP3r2") ||
+                    (socket2 == "SP3r1" && socket1 == "SP3r2") ||
+
+                    (socket1 == "SP3r1 (2P)" && socket2 == "SP3r2 (2P)") ||
+                    (socket2 == "SP3r1 (2P)" && socket1 == "SP3r2 (2P)") ||
+
                     (socket1 == socket2)
                 )
             }
@@ -54820,12 +54796,25 @@
     <script id="Options - Update - Ram">
         function getCpuSocketForRamSpeeds(cpuSocket) {
             var cpuSocketForRamSpeeds
+
             if (cpuSocket == "LGA 1151 (Skylake)") {
                 cpuSocketForRamSpeeds = "LGA 1151 V1"
             } else if (cpuSocket == "LGA 1151 (Kaby Lake)") {
                 cpuSocketForRamSpeeds = "LGA 1151 V1"
+
             } else if (cpuSocket == "LGA 1151 (Coffee Lake)") {
                 cpuSocketForRamSpeeds = "LGA 1151 V2"
+
+            } else if (cpuSocket == "SP3r1") {
+                cpuSocketForRamSpeeds = "SP3"
+            } else if (cpuSocket == "SP3r2") {
+                cpuSocketForRamSpeeds = "SP3"
+
+            } else if (cpuSocket == "SP3r1 (2P)") {
+                cpuSocketForRamSpeeds = "SP3 (2P)"
+            } else if (cpuSocket == "SP3r2 (2P)") {
+                cpuSocketForRamSpeeds = "SP3 (2P)"
+
             } else {
                 cpuSocketForRamSpeeds = cpuSocket
             }
