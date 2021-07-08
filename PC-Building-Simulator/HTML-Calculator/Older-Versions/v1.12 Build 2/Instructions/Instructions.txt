@@ -1,0 +1,45 @@
+===============================================================================================================
+
+Notes:
+
+The "Models" files are from the "Parts & Unlock Levels" source data, from "Excel Additional Properties - Models"
+- Certain sheets are saved as .csv
+- Use the "CSV To JSON Converter" web link to convert it to JSON
+- Use "2" for this setting: For "If to Keyed JSON, which field # is key? (Default 1)"
+- Use "CSV To Keyed JSON" to get your data.
+
+The ".html" files are essentially:
+- The TextAsset .txt file tables at the top (1 for base game, 1 for HEM)
+- Models JSON for some parts
+- Some JavaScript code at the bottom
+
+===============================================================================================================
+
+Instructions:
+
+1) Create the Models CSV files first.
+
+2) For each part:
+-- Replace the tables/models at the top with TextAsset file contents or converted Models data.
+-- Open a Browser Web Console.
+-- Use the web console to get the JSON results.
+-- Paste raw JSON into Visual Studio JSON file, for formatting
+-- Save JSON to file.
+-- Paste formatted JSON into HTML Calculator .html file, near the top, within the data section.
+
+3) Use the Motherboards web console, to create the Ram Speeds JSON, and perform the steps.
+
+===============================================================================================================
+
+Current Commands:
+
+Note: The boolean parameter is for whether you want to include the Hardware Expansion Mod parts.
+
+Commands that I use:
+document.write(JSON.stringify(getMotherboardCPUSocketMemorySpeeds()))
+document.write(JSON.stringify(getResults(true)))
+
+Other commands:
+document.write(JSON.stringify(getResults(false)))
+
+===============================================================================================================
