@@ -1,0 +1,41 @@
+﻿Asset Path,Asset Path (Normalized),Power Connectors,Real Slot Size
+Prefabs/GPU/Alphacool/GPU_Alphacool_Eisblock_GPXN_Acetal_NvidiaGeforceRTX_2080Ti_M02,Prefabs/GPU/Alphacool/GPU_Alphacool_Eisblock_GPXN_Acetal_NvidiaGeforceRTX_2080Ti_M02,8-pin + 8-pin,2
+Prefabs/GPU/Alphacool/GPU_Alphacool_Eisblock_GPXNPlexi_NvidiaGeforceRTX_2080Ti_M01,Prefabs/GPU/Alphacool/GPU_Alphacool_Eisblock_GPXNPlexi_NvidiaGeforceRTX_2080Ti_M01,8-pin + 8-pin,2
+Prefabs/GPU/Alphacool/GPU_Alphacool_NexXxoS_GPX_ NvidiaGeforceGTX1080_M10,Prefabs/GPU/Alphacool/GPU_Alphacool_NexXxoS_GPX_ NvidiaGeforceGTX1080_M10,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1070_GPU_Clear,Prefabs/GPU/EKWB/EKWB_Watercooled_1070_GPU_Clear,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1070_GPU_RGB,Prefabs/GPU/EKWB/EKWB_Watercooled_1070_GPU_RGB,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1070_GPU_Silver,Prefabs/GPU/EKWB/EKWB_Watercooled_1070_GPU_Silver,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1070ti_GPU_Clear,Prefabs/GPU/EKWB/EKWB_Watercooled_1070ti_GPU_Clear,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1070ti_GPU_RGB,Prefabs/GPU/EKWB/EKWB_Watercooled_1070ti_GPU_RGB,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1070ti_GPU_Silver,Prefabs/GPU/EKWB/EKWB_Watercooled_1070ti_GPU_Silver,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1080_GPU_Clear,Prefabs/GPU/EKWB/EKWB_Watercooled_1080_GPU_Clear,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1080_GPU_RGB,Prefabs/GPU/EKWB/EKWB_Watercooled_1080_GPU_RGB,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1080_GPU_Silver,Prefabs/GPU/EKWB/EKWB_Watercooled_1080_GPU_Silver,8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1080tiGPU_Clear,Prefabs/GPU/EKWB/EKWB_Watercooled_1080tiGPU_Clear,8-pin + 6-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1080tiGPU_RGB,Prefabs/GPU/EKWB/EKWB_Watercooled_1080tiGPU_RGB,8-pin + 6-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_1080tiGPU_Silver,Prefabs/GPU/EKWB/EKWB_Watercooled_1080tiGPU_Silver,8-pin + 6-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_Vega_5664GPU_Clear,Prefabs/GPU/EKWB/EKWB_Watercooled_Vega_5664GPU_Clear,8-pin + 8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_Vega_5664GPU_ClearRGB,Prefabs/GPU/EKWB/EKWB_Watercooled_Vega_5664GPU_ClearRGB,8-pin + 8-pin,2
+Prefabs/GPU/EKWB/EKWB_Watercooled_Vega_5664GPU_Silver,Prefabs/GPU/EKWB/EKWB_Watercooled_Vega_5664GPU_Silver,8-pin + 8-pin,2
+Prefabs/GPU/GigaByte/GPU_AORUS_RTX_2080_SUPER_WATERFORCE,Prefabs/GPU/GigaByte/GPU_AORUS_RTX_2080_SUPER_WATERFORCE,8-pin + 8-pin,2
+Prefabs/GPU/GigaByte/GPU_AUROS_RTX_2080_XTREME_WATERFORCE,Prefabs/GPU/GigaByte/GPU_AUROS_RTX_2080_XTREME_WATERFORCE,8-pin + 8-pin,2
+Prefabs/GPU/ZOTAC/GPU_Zotac_Gaming_Geforce_RTX2080Ti_ArticStorm,Prefabs/GPU/ZOTAC/GPU_Zotac_Gaming_Geforce_RTX2080Ti_ArticStorm,8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_GPU_Water_Block_3080_FE,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_GPU_Water_Block_3080_FE,8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_GPU_Water_Block_3090_FE,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_GPU_Water_Block_3090_FE,8-pin + 8-pin,2.5
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_Reference_3080,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_Reference_3080,8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_Reference_3090,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_Reference_3090,8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_STRIX_GPU_Water_Block_3070,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_STRIX_GPU_Water_Block_3070,8-pin + 8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_STRIX_GPU_Water_Block_3080,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_STRIX_GPU_Water_Block_3080,8-pin + 8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_STRIX_GPU_Water_Block_3090,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_STRIX_GPU_Water_Block_3090,8-pin + 8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_VENTUS_GPU_Water_Block_3080,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_VENTUS_GPU_Water_Block_3080,8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_VENTUS_GPU_Water_Block_3090,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_30_SERIES_VENTUS_GPU_Water_Block_3090,8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_RX_SERIES_GPU_Water_Block_6800_XT,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_RX_SERIES_GPU_Water_Block_6800_XT,8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_RX_SERIES_GPU_Water_Block_6900_XT,v1_11_0/Prefabs/GPU/Corsair/GPU_CORSAIR_Hydro_X_Series_XG7_RGB_RX_SERIES_GPU_Water_Block_6900_XT,8-pin + 8-pin,2
+v1_11_0/Prefabs/GPU/EVGA/GPU_EVGA_GEFORCE_RTX_3080_FTW3_ULTRA_HYDRO_COPPER_GAMING,v1_11_0/Prefabs/GPU/EVGA/GPU_EVGA_GEFORCE_RTX_3080_FTW3_ULTRA_HYDRO_COPPER_GAMING,8-pin + 8-pin + 8-pin,1.5
+v1_11_0/Prefabs/GPU/EVGA/GPU_EVGA_GEFORCE_RTX_3080_XC3_ULTRA_HYDRO_COPPER_GAMING,v1_11_0/Prefabs/GPU/EVGA/GPU_EVGA_GEFORCE_RTX_3080_XC3_ULTRA_HYDRO_COPPER_GAMING,8-pin + 8-pin,1.5
+v1_11_0/Prefabs/GPU/EVGA/GPU_EVGA_GEFORCE_RTX_3090_FTW3_ULTRA_HYDRO_COPPER_GAMING,v1_11_0/Prefabs/GPU/EVGA/GPU_EVGA_GEFORCE_RTX_3090_FTW3_ULTRA_HYDRO_COPPER_GAMING,8-pin + 8-pin + 8-pin,1.5
+v1_11_0/Prefabs/GPU/EVGA/GPU_EVGA_GEFORCE_RTX_3090_XC3_ULTRA_HYDRO_COPPER_GAMING,v1_11_0/Prefabs/GPU/EVGA/GPU_EVGA_GEFORCE_RTX_3090_XC3_ULTRA_HYDRO_COPPER_GAMING,8-pin + 8-pin + 8-pin,1.5
+v1_13_0/Prefabs/GPU/ZOTAC/GPU_ZOTAC_Gaming_GeForce_RTX_3090_ArcticStorm,v1_13_0/Prefabs/GPU/ZOTAC/GPU_ZOTAC_Gaming_GeForce_RTX_3090_ArcticStorm,8-pin + 8-pin + 8-pin,2
+v1_7_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2080_Ti_FTW3_Ultra_Hydro_Cooper_Gaming,v1_7_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2080_Ti_FTW3_Ultra_Hydro_Cooper_Gaming,8-pin + 8-pin,2
+v1_9_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2080_Super_FTW3_Ultra_Hydro_Cooper_Gaming,v1_9_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2080_Super_FTW3_Ultra_Hydro_Cooper_Gaming,8-pin + 8-pin,2
+v1_9_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2080_Ti_XC_HYDRO_COPPER_GAMING,v1_9_0/Prefabs/GPU/EVGA/GPU_EVGA_GeForce_RTX_2080_Ti_XC_HYDRO_COPPER_GAMING,8-pin + 8-pin,2
